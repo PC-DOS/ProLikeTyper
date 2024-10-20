@@ -66,6 +66,9 @@
                 Case "SYSMON"
                     Dim SysMonWindowInstance As New SystemMonitorWindow
                     SysMonWindowInstance.Show()
+                Case "PULLDATA"
+                    Dim DownloaderWindowInstance As New DownloaderWindow
+                    DownloaderWindowInstance.Show()
                 Case "EXIT"
                     Application.Current.Shutdown()
                 Case Else

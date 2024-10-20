@@ -1,0 +1,152 @@
+﻿Imports System.Reflection
+Imports System.IO
+Imports System.Text
+Imports System.Windows.Threading
+Public Class DownloaderWindow
+    'Size of "file" and "database"
+    Const MaxSingleFileSizeByte As Double = 64 * 1024 * 1024
+    Const MinSingleFileSizeByte As Double = 5 * 1024 * 1024
+    Const MaxFileCount As Integer = 2450000
+    Const MinFileCount As Integer = 24500
+    Const MaxDownloadSpeedByte As Double = 45 * 1024 * 1024
+    Const MinDownloadSpeedByte As Double = 25 * 1024 * 1024
+    Const DownloadSpeedGeneratingInterval As Double = 50
+    Const DownloadSpeedCalaculatingInterval As Double = 1000
+
+    'Data of current downloading file
+    Dim CurrentFilePath As String
+    Dim CurrentFileSizeTotalByte As Double
+    Dim CurrentFileSizeDownloadedByte As Double
+
+    'Data of current downloading database
+    Dim CurrentDownloadingDatabaseLocation As String
+    Dim CurrentDownloadingDatabaseFileCount As Integer
+    Dim CurrentDownloadingFileIndex As Integer
+
+    'Global randowm generator
+    Dim RandomGen As New Random
+
+    'Downloader simulation timer
+    Dim FileDownloadTimer As New DispatcherTimer
+    Dim DownloadSpeedCalaculatingTimer As New DispatcherTimer
+    Dim CurrentDownloadSpeed As Double
+    Private Function ByteToMByte(SizeByte As Double) As Double
+        Return SizeByte / 1024 / 1024
+    End Function
+    Private Function GenerateRandomHexString(Length As Integer) As String
+        Dim HexResult As String = ""
+        For i As Integer = 1 To Length
+            'Add number or letter
+            If RandomGen.Next(0, 2) = 0 Then
+                HexResult = HexResult & Chr(RandomGen.Next(48, 57))
+            Else
+                HexResult = HexResult & Chr(RandomGen.Next(97, 122))
+            End If
+        Next
+        Return HexResult
+    End Function
+
+    Private Sub InitializeRemoteDatabaseData()
+        'Generate database address
+        Dim DatabaseAddressSuffix As Integer = RandomGen.Next(1, 5)
+        Select Case DatabaseAddressSuffix
+            Case 1
+                CurrentDownloadingDatabaseLocation = "//192.0.2." & RandomGen.Next(1, 254).ToString() & "/"
+            Case 2
+                CurrentDownloadingDatabaseLocation = "//198.51.100." & RandomGen.Next(1, 254).ToString() & "/"
+            Case 3
+                CurrentDownloadingDatabaseLocation = "//203.0.113." & RandomGen.Next(1, 254).ToString() & "/"
+            Case 4
+                CurrentDownloadingDatabaseLocation = "//233.252.0." & RandomGen.Next(1, 254).ToString() & "/"
+            Case Else
+                CurrentDownloadingDatabaseLocation = "//203.0.113." & RandomGen.Next(1, 254).ToString() & "/"
+        End Select
+
+        'Generate database directory
+        CurrentDownloadingDatabaseLocation = CurrentDownloadingDatabaseLocation & Guid.NewGuid().ToString() & "/"
+
+        'Generate file count
+        CurrentDownloadingDatabaseFileCount = RandomGen.Next(MinFileCount, MaxFileCount + 1)
+        CurrentDownloadingFileIndex = 1
+    End Sub
+
+    Private Sub GenerateNextFileInformation()
+        'Generate path
+        CurrentFilePath = ""
+        Dim PathLevel As Integer = RandomGen.Next(1, 4)
+        For i As Integer = 1 To PathLevel
+            CurrentFilePath = CurrentFilePath & GenerateRandomHexString(RandomGen.Next(5, 15)) & "/"
+        Next
+
+        'Generate name
+        CurrentFilePath = CurrentFilePath & GenerateRandomHexString(RandomGen.Next(10, 25))
+
+        'Generate size
+        CurrentFileSizeTotalByte = RandomGen.NextDouble() * (MaxSingleFileSizeByte - MinSingleFileSizeByte) + MinSingleFileSizeByte
+        CurrentFileSizeDownloadedByte = 0
+    End Sub
+
+    Private Sub RefreshStatusIndicator()
+        'Current file
+        lblFileName.Text = CurrentDownloadingDatabaseLocation & CurrentFilePath
+        prgDownloadCurrent.Minimum = 0
+        prgDownloadCurrent.Maximum = CurrentFileSizeTotalByte
+        prgDownloadCurrent.Value = CurrentFileSizeDownloadedByte
+        lblFileSize.Text = ByteToMByte(CurrentFileSizeDownloadedByte).ToString("F2") & " MB / " & _
+                         ByteToMByte(CurrentFileSizeTotalByte).ToString("F2") & " MB, " & _
+                         ByteToMByte(CurrentDownloadSpeed).ToString("F2") * 8 & " Mbps"
+
+        'Current Database
+        prgDownloadTotal.Minimum = 0
+        prgDownloadTotal.Maximum = CurrentDownloadingDatabaseFileCount
+        prgDownloadTotal.Value = CurrentDownloadingFileIndex - 1
+        lblFileCount.Text = (CurrentDownloadingFileIndex - 1).ToString() & " / " & CurrentDownloadingDatabaseFileCount.ToString & " Files"
+    End Sub
+
+    Private Sub DownloaderWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        'Generate data
+        InitializeRemoteDatabaseData()
+        GenerateNextFileInformation()
+        CurrentDownloadSpeed = 0
+        RefreshStatusIndicator()
+
+        'Initialize timers
+        AddHandler FileDownloadTimer.Tick, AddressOf FileDownloadTimer_Tick
+        FileDownloadTimer.Interval = TimeSpan.FromMilliseconds(DownloadSpeedGeneratingInterval)
+        FileDownloadTimer.Start()
+        AddHandler DownloadSpeedCalaculatingTimer.Tick, AddressOf DownloadSpeedCalaculatingTimer_Tick
+        DownloadSpeedCalaculatingTimer.Interval = TimeSpan.FromMilliseconds(DownloadSpeedCalaculatingInterval)
+        DownloadSpeedCalaculatingTimer.Start()
+    End Sub
+
+    Private Sub FileDownloadTimer_Tick()
+        'Generate one-shot download speed
+        'Generating interval is scaled by  (DownloadSpeedCalaculatingInterval / DownloadSpeedGeneratingInterval) from 1000 milliseconds
+        Dim DownloadSpeedOnce As Double
+        DownloadSpeedOnce = RandomGen.NextDouble() * (MaxDownloadSpeedByte - MinDownloadSpeedByte) + MinDownloadSpeedByte
+        DownloadSpeedOnce = DownloadSpeedOnce / (DownloadSpeedCalaculatingInterval / DownloadSpeedGeneratingInterval)
+        'Avoid exceeding remaining file size
+        DownloadSpeedOnce = Math.Min(DownloadSpeedOnce, CurrentFileSizeTotalByte - CurrentFileSizeDownloadedByte)
+
+        'Simulate downloading
+        CurrentFileSizeDownloadedByte += DownloadSpeedOnce
+        CurrentDownloadSpeed += DownloadSpeedOnce
+
+        'Check if we need to proceed to to next file
+        If CurrentFileSizeDownloadedByte >= CurrentFileSizeTotalByte Then
+            GenerateNextFileInformation()
+            CurrentDownloadingFileIndex += 1
+            If CurrentDownloadingFileIndex > CurrentDownloadingDatabaseFileCount Then
+                InitializeRemoteDatabaseData()
+                GenerateNextFileInformation()
+            End If
+        End If
+
+        'Update indicators
+        RefreshStatusIndicator()
+    End Sub
+
+    Private Sub DownloadSpeedCalaculatingTimer_Tick()
+        CurrentDownloadSpeed = 0
+    End Sub
+End Class

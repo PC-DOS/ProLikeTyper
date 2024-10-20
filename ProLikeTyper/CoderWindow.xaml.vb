@@ -4,8 +4,13 @@ Imports System.Text
 Imports System.Windows.Threading
 Public Class CoderWindow
     'Timer object for "coding"
+    Const TypingInterval As Double = 25
+    Const CursorFalshingInterval As Double = 500
     Dim CoderTimer As New DispatcherTimer()
     Dim CursorTimer As New DispatcherTimer()
+
+    'Global randowm generator
+    Dim RandomGen As New Random
 
     'Code source
     Const InternalCodeSource As String = "CoderText.txt"
@@ -23,8 +28,7 @@ Public Class CoderWindow
     Const ConsoleCursorFull As String = "▮"
     Const ConsoleCursorEmpty As String = "▯"
     Private Function GenerateRandomCodeLineNumber() As Integer
-        Dim LinePointerGenerator As New Random
-        Return LinePointerGenerator.Next() Mod CodeSourceList.Count
+        Return RandomGen.Next(0, CodeSourceList.Count)
     End Function
     Private Sub CoderWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         'Try loading code from external code file
@@ -52,20 +56,19 @@ Public Class CoderWindow
         CodeSourceLinePointer = GenerateRandomCodeLineNumber()
         CodeSourceColumnPointer = 0
 
-        'Initialize timer
+        'Initialize timers
         AddHandler CoderTimer.Tick, AddressOf CoderTimer_Tick
-        CoderTimer.Interval = TimeSpan.FromMilliseconds(25)
+        CoderTimer.Interval = TimeSpan.FromMilliseconds(TypingInterval)
         CoderTimer.Start()
         AddHandler CursorTimer.Tick, AddressOf CursorTimer_Tick
-        CursorTimer.Interval = TimeSpan.FromMilliseconds(500)
+        CursorTimer.Interval = TimeSpan.FromMilliseconds(CursorFalshingInterval)
         CursorTimer.Start()
     End Sub
 
     Private Sub CoderTimer_Tick()
         ''Testing: generate a random text from ASCII table
         'Dim CharAscii As Integer = 0
-        'Dim CharGenerator As New Random
-        'CharAscii = CharGenerator.Next() Mod 97 + 32
+        'CharAscii = RandomGen.Next(32, 129)
         'If CharAscii <> 128 Then
         '    CodeText = CodeText & Chr(CharAscii)
         'Else

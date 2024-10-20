@@ -8,8 +8,8 @@ Imports System.Windows.Threading
 
 Public Class SystemMonitorWindow
     'Data collecting options
-    Private Const HistoryDataPointCount As Integer = 100
-    Private Const DataColleactingInterval As Integer = 500
+    Const HistoryDataPointCount As Integer = 100
+    Const DataCollectingInterval As Integer = 500
 
     'CPU data buffer and timer
     'Performace counter and timer
@@ -69,7 +69,7 @@ Public Class SystemMonitorWindow
         CPUCounter.NextValue()
         Dim CurrentCPUUsage As Double = GetCPUUsage()
         lblCPUUsage.Text = "CPU Usage - " & CurrentCPUUsage.ToString("F2") & "%"
-        CPUDataCollectingTimer.Interval = TimeSpan.FromMilliseconds(DataColleactingInterval)
+        CPUDataCollectingTimer.Interval = TimeSpan.FromMilliseconds(DataCollectingInterval)
         AddHandler CPUDataCollectingTimer.Tick, AddressOf CPUDataCollectingTimer_Tick
         CPUDataCollectingTimer.Start()
         'Data plotting related
@@ -131,7 +131,7 @@ Public Class SystemMonitorWindow
         'RAMCounter.NextValue()
         Dim CurrentRAMUsage As Double = GetRAMUsage()
         lblRAMUsage.Text = "RAM Usage - " & CurrentRAMUsage.ToString("F2") & " MB / " & GetRAMTotalInMegabyte().ToString("F2") & " MB"
-        RAMDataCollectingTimer.Interval = TimeSpan.FromMilliseconds(DataColleactingInterval)
+        RAMDataCollectingTimer.Interval = TimeSpan.FromMilliseconds(DataCollectingInterval)
         AddHandler RAMDataCollectingTimer.Tick, AddressOf RAMDataCollectingTimer_Tick
         RAMDataCollectingTimer.Start()
         'Data plotting related
@@ -196,7 +196,7 @@ Public Class SystemMonitorWindow
         Dim CurrentDiskReadLoad As Double = GetDiskReadLoad()
         Dim CurrentDiskWriteLoad As Double = GetDiskWriteLoad()
         lblDiskUsage.Text = "Disk Usage - " & CurrentDiskReadLoad.ToString("F2") & "% Read / " & CurrentDiskWriteLoad.ToString("F2") & "% Write"
-        DiskDataCollectingTimer.Interval = TimeSpan.FromMilliseconds(DataColleactingInterval)
+        DiskDataCollectingTimer.Interval = TimeSpan.FromMilliseconds(DataCollectingInterval)
         AddHandler DiskDataCollectingTimer.Tick, AddressOf DiskDataCollectingTimer_Tick
         DiskDataCollectingTimer.Start()
         'Data plotting related
