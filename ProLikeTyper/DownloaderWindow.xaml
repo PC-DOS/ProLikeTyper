@@ -6,7 +6,7 @@
     WindowTitleBrush="Gray" NonActiveWindowTitleBrush="LightGray" TitleForeground="Black"
     Background="Black" Foreground="#FF00FF00" 
     FontFamily="Consolas"
-    Height="325" Width="735" MinHeight="250" MinWidth="450">
+    Height="325" Width="735" MinHeight="275" MinWidth="450">
     <Controls:MetroWindow.Resources>
         <Style x:Key="{x:Type ProgressBar}" TargetType="{x:Type ProgressBar}">
             <Setter Property="Template">
@@ -54,7 +54,7 @@
             <TextBlock Text="Pulling data from remote..." FontSize="18" TextAlignment="Center" Margin="10" />
             <TextBlock Text="Currently downloading:" FontSize="14" TextAlignment="Left" Margin="10,0" />
             <TextBlock x:Name="lblFileName" Text="/DB/1234567890abcedf/aaz/1db5" FontSize="14" TextAlignment="Left" Margin="10,5,10,0" />
-            <ProgressBar x:Name="prgDownloadCurrent" Foreground="#FF00FF00" Margin="10,5,10,0" BorderBrush="#FF00FF00" Background="Black" Height="40" Value="51" />
+            <ProgressBar x:Name="prgDownloadCurrent" Foreground="#FF00FF00" Margin="10,5,10,0" BorderBrush="#FF00FF00" Background="Black" Height="40" Value="5" />
             <TextBlock x:Name="lblFileSize" Text="25 MB / 245 MB, 12 Mbps" FontSize="14" TextAlignment="Left" Margin="10,5,10,0" />
             <TextBlock Text="Total progress:" FontSize="14" TextAlignment="Left" Margin="10,10,10,0" />
             <ProgressBar x:Name="prgDownloadTotal" Foreground="#FF00FF00" Margin="10,5,10,0" BorderBrush="#FF00FF00" Background="Black" Height="40" Value="25" />
