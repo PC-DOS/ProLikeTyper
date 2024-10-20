@@ -7,7 +7,7 @@
     WindowTitleBrush="Gray" NonActiveWindowTitleBrush="LightGray" TitleForeground="Black"
     Background="Black" Foreground="#FF00FF00" 
     FontFamily="Consolas"
-    Height="525" Width="735" MinHeight="250" MinWidth="450">
+    Height="525" Width="735" MinHeight="450" MinWidth="450">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

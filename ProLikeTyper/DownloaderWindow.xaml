@@ -6,7 +6,7 @@
     WindowTitleBrush="Gray" NonActiveWindowTitleBrush="LightGray" TitleForeground="Black"
     Background="Black" Foreground="#FF00FF00" 
     FontFamily="Consolas"
-    Height="325" Width="735" MinHeight="275" MinWidth="450">
+    Height="325" Width="735" MinHeight="245" MinWidth="450">
     <Controls:MetroWindow.Resources>
         <Style x:Key="{x:Type ProgressBar}" TargetType="{x:Type ProgressBar}">
             <Setter Property="Template">

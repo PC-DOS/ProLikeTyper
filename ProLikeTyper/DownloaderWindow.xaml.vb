@@ -163,4 +163,15 @@ Public Class DownloaderWindow
         DownloadSpeedDisplay = CurrentDownloadSpeed
         CurrentDownloadSpeed = 0
     End Sub
+
+    Private Sub DownloaderWindow_SizeChanged(sender As Object, e As SizeChangedEventArgs) Handles Me.SizeChanged
+        'Change height of progress bars manually
+        If Me.Height <= 300 Then
+            prgDownloadCurrent.Height = 25
+            prgDownloadTotal.Height = 25
+        Else
+            prgDownloadCurrent.Height = 40
+            prgDownloadTotal.Height = 40
+        End If
+    End Sub
 End Class
