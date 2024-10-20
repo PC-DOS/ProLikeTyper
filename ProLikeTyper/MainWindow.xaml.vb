@@ -19,8 +19,7 @@
 
         'Restore potential underline(s) in description
         If UBound(SelectedCommandTags) >= 1 Then
-            Dim i As Integer
-            For i = 1 To UBound(SelectedCommandTags)
+            For i As Integer = 1 To UBound(SelectedCommandTags)
                 SelectedCommandDescription = SelectedCommandDescription & SelectedCommandTags(i)
                 If i <> UBound(SelectedCommandTags) Then
                     SelectedCommandDescription = SelectedCommandDescription & "_"
@@ -65,7 +64,8 @@
                 Case "NETSCAN"
 
                 Case "SYSMON"
-
+                    Dim SysMonWindowInstance As New SystemMonitorWindow
+                    SysMonWindowInstance.Show()
                 Case "EXIT"
                     Application.Current.Shutdown()
                 Case Else

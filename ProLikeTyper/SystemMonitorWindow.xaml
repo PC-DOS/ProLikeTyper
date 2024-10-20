@@ -1,0 +1,42 @@
+﻿<Controls:MetroWindow x:Class="SystemMonitorWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:oxyplot="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
+    Title="SystemMonitor" 
+    WindowTitleBrush="Gray" NonActiveWindowTitleBrush="LightGray" TitleForeground="Black"
+    Background="Black" Foreground="#FF00FF00" 
+    FontFamily="Consolas"
+    Height="525" Width="735" MinHeight="250" MinWidth="450">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" x:Name="lblCPUUsage" Text="CPU Usage = 0%" VerticalAlignment="Top" Margin="10" FontSize="14" />
+            <oxyplot:Plot Grid.Row="1" x:Name="pltCPUUsage" PlotAreaBackground="Black" Background="Black" />
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" x:Name="lblRAMUsage" Text="RAM Usage = 1024 MB / 8192 MB" VerticalAlignment="Top" Margin="10" FontSize="14" />
+            <oxyplot:Plot Grid.Row="1" x:Name="pltRAMUsage" PlotAreaBackground="Black" Background="Black" />
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" x:Name="lblDiskUsage" Text="RAM Usage = 0% Read / 0% Write" VerticalAlignment="Top" Margin="10" FontSize="14" />
+            <oxyplot:Plot Grid.Row="1" x:Name="pltDiskUsage" PlotAreaBackground="Black" Background="Black" />
+        </Grid>
+    </Grid>
+</Controls:MetroWindow>
