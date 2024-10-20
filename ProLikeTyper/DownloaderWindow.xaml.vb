@@ -30,6 +30,8 @@ Public Class DownloaderWindow
     Dim FileDownloadTimer As New DispatcherTimer
     Dim DownloadSpeedCalaculatingTimer As New DispatcherTimer
     Dim CurrentDownloadSpeed As Double
+    Dim DownloadSpeedDisplay As Double
+    Dim IsDownloaderFirstRun As Boolean = True
     Private Function ByteToMByte(SizeByte As Double) As Double
         Return SizeByte / 1024 / 1024
     End Function
@@ -94,7 +96,7 @@ Public Class DownloaderWindow
         prgDownloadCurrent.Value = CurrentFileSizeDownloadedByte
         lblFileSize.Text = ByteToMByte(CurrentFileSizeDownloadedByte).ToString("F2") & " MB / " & _
                          ByteToMByte(CurrentFileSizeTotalByte).ToString("F2") & " MB, " & _
-                         ByteToMByte(CurrentDownloadSpeed).ToString("F2") * 8 & " Mbps"
+                         ByteToMByte(DownloadSpeedDisplay).ToString("F2") * 8 & " Mbps"
 
         'Current Database
         prgDownloadTotal.Minimum = 0
@@ -108,6 +110,7 @@ Public Class DownloaderWindow
         InitializeRemoteDatabaseData()
         GenerateNextFileInformation()
         CurrentDownloadSpeed = 0
+        DownloadSpeedDisplay = 0
         RefreshStatusIndicator()
 
         'Initialize timers
@@ -142,11 +145,19 @@ Public Class DownloaderWindow
             End If
         End If
 
+        'Allow download speed to be refreshed quickly
+        'Otherwise, it will keep 0 Mbps in first DownloadSpeedCalaculatingTimer interval
+        If IsDownloaderFirstRun Then
+            DownloadSpeedDisplay = CurrentDownloadSpeed * (DownloadSpeedCalaculatingInterval / DownloadSpeedGeneratingInterval)
+            IsDownloaderFirstRun = False
+        End If
+
         'Update indicators
         RefreshStatusIndicator()
     End Sub
 
     Private Sub DownloadSpeedCalaculatingTimer_Tick()
+        DownloadSpeedDisplay = CurrentDownloadSpeed
         CurrentDownloadSpeed = 0
     End Sub
 End Class

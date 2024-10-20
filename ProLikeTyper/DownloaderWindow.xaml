@@ -8,8 +8,7 @@
     FontFamily="Consolas"
     Height="325" Width="735" MinHeight="250" MinWidth="450">
     <Controls:MetroWindow.Resources>
-        <Style x:Key="{x:Type ProgressBar}"
-     TargetType="{x:Type ProgressBar}">
+        <Style x:Key="{x:Type ProgressBar}" TargetType="{x:Type ProgressBar}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ProgressBar}">
@@ -17,17 +16,17 @@
                             <Border 
                                 Name="PART_Track" 
                                 CornerRadius="0" 
-                                Background="Black" 
-                                BorderBrush="#FF00FF00"
-                                BorderThickness="1" />
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" />
                             <Border 
                                 Name="PART_Indicator" 
                                 CornerRadius="0" 
-                                Background="#FF00FF00" 
+                                Background="{TemplateBinding Foreground}" 
                                 BorderBrush="Black"  
-                                BorderThickness="1" 
+                                BorderThickness="0" 
                                 HorizontalAlignment="Left"
-                                Margin="4" />
+                                Margin="5" />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -42,7 +41,7 @@
             <ProgressBar x:Name="prgDownloadCurrent" Foreground="#FF00FF00" Margin="10,5,10,0" BorderBrush="#FF00FF00" Background="Black" Height="40" Value="51" />
             <TextBlock x:Name="lblFileSize" Text="25 MB / 245 MB, 12 Mbps" FontSize="14" TextAlignment="Left" Margin="10,5,10,0" />
             <TextBlock Text="Total progress:" FontSize="14" TextAlignment="Left" Margin="10,10,10,0" />
-            <ProgressBar x:Name="prgDownloadTotal" Foreground="#FF00FF00" Margin="10,5,10,0" BorderBrush="#FF00FF00" Background="Black" Height="40" />
+            <ProgressBar x:Name="prgDownloadTotal" Foreground="#FF00FF00" Margin="10,5,10,0" BorderBrush="#FF00FF00" Background="Black" Height="40" Value="25" />
             <TextBlock x:Name="lblFileCount" Text="25 / 1245 Files" FontSize="14" TextAlignment="Left" Margin="10,5,10,0" />
         </StackPanel>
     </Grid>
