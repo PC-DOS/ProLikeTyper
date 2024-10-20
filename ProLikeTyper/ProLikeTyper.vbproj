@@ -89,6 +89,9 @@
     <Compile Include="DownloaderWindow.xaml.vb">
       <DependentUpon>DownloaderWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProductionMonitorWindow.xaml.vb">
+      <DependentUpon>ProductionMonitorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SystemMonitorWindow.xaml.vb">
       <DependentUpon>SystemMonitorWindow.xaml</DependentUpon>
     </Compile>
@@ -115,6 +118,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ProductionMonitorWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SystemMonitorWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

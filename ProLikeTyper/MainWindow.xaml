@@ -16,10 +16,10 @@
         <Grid Grid.Column="0">
             <ListBox x:Name="lstCommands" Background="#FF646464" Foreground="White" FontSize="14">
                 <ListBoxItem Content="Coder" Background="#FF646464" Foreground="White" Tag="CODER_Simulates a coding screen, put &quot;CoderText.txt&quot; in app folder to use your customized code" />
-                <ListBoxItem Content="Netscan" Background="#FF646464" Foreground="White" Tag="NETSCAN_Simulates a network scanning" />
-                <ListBoxItem Content="Sysmon" Background="#FF646464" Foreground="White" Tag="SYSMON_Sytem monitoring" />
-                <ListBoxItem Content="Pulldata" Background="#FF646464" Foreground="White" Tag="PULLDATA_Simulates data pulling from remote" />
-                <ListBoxItem Content="Coder" Background="#FF646464" Foreground="White" Tag="" />
+                <ListBoxItem Content="NetScan" Background="#FF646464" Foreground="White" Tag="NETSCAN_Simulates a network scanning" />
+                <ListBoxItem Content="SysMon" Background="#FF646464" Foreground="White" Tag="SYSMON_Sytem monitoring" />
+                <ListBoxItem Content="PullData" Background="#FF646464" Foreground="White" Tag="PULLDATA_Simulates data pulling from remote" />
+                <ListBoxItem Content="ProdMon" Background="#FF646464" Foreground="White" Tag="PRODMON_Simulates a production monitoring system" />
                 <ListBoxItem Content="Exit" Background="#FF646464" Foreground="White" Tag="EXIT_Stop all executing commands and exit" />
             </ListBox>
         </Grid>

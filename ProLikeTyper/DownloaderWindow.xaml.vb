@@ -4,12 +4,12 @@ Imports System.Text
 Imports System.Windows.Threading
 Public Class DownloaderWindow
     'Size of "file" and "database"
-    Const MaxSingleFileSizeByte As Double = 64 * 1024 * 1024
-    Const MinSingleFileSizeByte As Double = 5 * 1024 * 1024
-    Const MaxFileCount As Integer = 2450000
-    Const MinFileCount As Integer = 24500
-    Const MaxDownloadSpeedByte As Double = 45 * 1024 * 1024
-    Const MinDownloadSpeedByte As Double = 25 * 1024 * 1024
+    Const SingleFileSizeByteMax As Double = 64 * 1024 * 1024
+    Const SingleFileSizeByteMin As Double = 5 * 1024 * 1024
+    Const FileCountMax As Integer = 2450000
+    Const FileCountMin As Integer = 24500
+    Const DownloadSpeedByteMax As Double = 45 * 1024 * 1024
+    Const DownloadSpeedByteMin As Double = 25 * 1024 * 1024
     Const DownloadSpeedGeneratingInterval As Double = 50
     Const DownloadSpeedCalaculatingInterval As Double = 1000
 
@@ -32,6 +32,9 @@ Public Class DownloaderWindow
     Dim CurrentDownloadSpeed As Double
     Dim DownloadSpeedDisplay As Double
     Dim IsDownloaderFirstRun As Boolean = True
+    Private Function GenerateRandomDouble(ValMin As Double, ValMax As Double) As Double
+        Return RandomGen.NextDouble() * (ValMax - ValMin) + ValMin
+    End Function
     Private Function ByteToMByte(SizeByte As Double) As Double
         Return SizeByte / 1024 / 1024
     End Function
@@ -68,7 +71,7 @@ Public Class DownloaderWindow
         CurrentDownloadingDatabaseLocation = CurrentDownloadingDatabaseLocation & Guid.NewGuid().ToString() & "/"
 
         'Generate file count
-        CurrentDownloadingDatabaseFileCount = RandomGen.Next(MinFileCount, MaxFileCount + 1)
+        CurrentDownloadingDatabaseFileCount = RandomGen.Next(FileCountMin, FileCountMax + 1)
         CurrentDownloadingFileIndex = 1
     End Sub
 
@@ -84,7 +87,7 @@ Public Class DownloaderWindow
         CurrentFilePath = CurrentFilePath & GenerateRandomHexString(RandomGen.Next(10, 25))
 
         'Generate size
-        CurrentFileSizeTotalByte = RandomGen.NextDouble() * (MaxSingleFileSizeByte - MinSingleFileSizeByte) + MinSingleFileSizeByte
+        CurrentFileSizeTotalByte = GenerateRandomDouble(SingleFileSizeByteMin, SingleFileSizeByteMax)
         CurrentFileSizeDownloadedByte = 0
     End Sub
 
@@ -126,7 +129,7 @@ Public Class DownloaderWindow
         'Generate one-shot download speed
         'Generating interval is scaled by  (DownloadSpeedCalaculatingInterval / DownloadSpeedGeneratingInterval) from 1000 milliseconds
         Dim DownloadSpeedOnce As Double
-        DownloadSpeedOnce = RandomGen.NextDouble() * (MaxDownloadSpeedByte - MinDownloadSpeedByte) + MinDownloadSpeedByte
+        DownloadSpeedOnce = GenerateRandomDouble(DownloadSpeedByteMin, DownloadSpeedByteMax)
         DownloadSpeedOnce = DownloadSpeedOnce / (DownloadSpeedCalaculatingInterval / DownloadSpeedGeneratingInterval)
         'Avoid exceeding remaining file size
         DownloadSpeedOnce = Math.Min(DownloadSpeedOnce, CurrentFileSizeTotalByte - CurrentFileSizeDownloadedByte)

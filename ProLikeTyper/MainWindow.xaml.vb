@@ -69,6 +69,9 @@
                 Case "PULLDATA"
                     Dim DownloaderWindowInstance As New DownloaderWindow
                     DownloaderWindowInstance.Show()
+                Case "PRODMON"
+                    Dim ProductionMonitorWindowInstance As New ProductionMonitorWindow
+                    ProductionMonitorWindowInstance.Show()
                 Case "EXIT"
                     Application.Current.Shutdown()
                 Case Else
