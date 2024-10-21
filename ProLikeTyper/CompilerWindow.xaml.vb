@@ -31,12 +31,15 @@ Public Class CompilerWindow
     Dim ProcessingSpeedCalaculatingTimer As New DispatcherTimer
     Dim CurrentProcessingSpeed As Double
     Dim ProcessingSpeedDisplay As Double
+
     Private Function GenerateRandomDouble(ValMin As Double, ValMax As Double) As Double
         Return RandomGen.NextDouble() * (ValMax - ValMin) + ValMin
     End Function
+
     Private Function ByteToMByte(SizeByte As Double) As Double
         Return SizeByte / 1024 / 1024
     End Function
+
     Private Function GenerateRandomHexString(Length As Integer) As String
         Dim HexResult As String = ""
         For i As Integer = 1 To Length

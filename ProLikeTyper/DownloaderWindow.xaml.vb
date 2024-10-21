@@ -32,12 +32,15 @@ Public Class DownloaderWindow
     Dim CurrentDownloadSpeed As Double
     Dim DownloadSpeedDisplay As Double
     Dim IsDownloaderFirstRun As Boolean = True
+
     Private Function GenerateRandomDouble(ValMin As Double, ValMax As Double) As Double
         Return RandomGen.NextDouble() * (ValMax - ValMin) + ValMin
     End Function
+
     Private Function ByteToMByte(SizeByte As Double) As Double
         Return SizeByte / 1024 / 1024
     End Function
+
     Private Function GenerateRandomHexString(Length As Integer) As String
         Dim HexResult As String = ""
         For i As Integer = 1 To Length
@@ -53,8 +56,8 @@ Public Class DownloaderWindow
 
     Private Sub InitializeRemoteDatabaseData()
         'Generate database address
-        Dim DatabaseAddressSuffix As Integer = RandomGen.Next(1, 5)
-        Select Case DatabaseAddressSuffix
+        Dim DatabaseAddressPrefix As Integer = RandomGen.Next(1, 5)
+        Select Case DatabaseAddressPrefix
             Case 1
                 CurrentDownloadingDatabaseLocation = "//192.0.2." & RandomGen.Next(1, 254).ToString() & "/"
             Case 2

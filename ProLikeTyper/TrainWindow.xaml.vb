@@ -38,12 +38,15 @@ Public Class TrainWindow
     Dim CurrentTrainingSpeed As Double
     Dim TrainingSpeedDisplay As Double
     Dim IsTrainFirstRun As Boolean = True
+
     Private Function GenerateRandomDouble(ValMin As Double, ValMax As Double) As Double
         Return RandomGen.NextDouble() * (ValMax - ValMin) + ValMin
     End Function
+
     Private Function ByteToMByte(SizeByte As Double) As Double
         Return SizeByte / 1024 / 1024
     End Function
+
     Private Function GenerateRandomHexString(Length As Integer) As String
         Dim HexResult As String = ""
         For i As Integer = 1 To Length
@@ -65,6 +68,7 @@ Public Class TrainWindow
         'Generate iteration count per epoch
         CurrentEpochIterationCount = RandomGen.Next(IterationCountMin, IterationCountMax + 1)
     End Sub
+
     Private Sub InitializeEpochData()
         'Initialize step count
         CurrentIterationIndex = 1
@@ -103,7 +107,7 @@ Public Class TrainWindow
         lblTotalCount.Text = (CurrentEpochIndex - 1).ToString() & " / " & CurrentTrainEpochCount.ToString() & " Epoches"
     End Sub
 
-    Private Sub CompilerWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+    Private Sub TrainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         'Generate data
         InitializeTrainData()
         InitializeEpochData()

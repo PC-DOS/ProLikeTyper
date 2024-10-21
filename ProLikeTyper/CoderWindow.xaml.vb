@@ -27,9 +27,11 @@ Public Class CoderWindow
     Dim IsConsoleCursorVisible As Boolean = True
     Const ConsoleCursorFull As String = "▮"
     Const ConsoleCursorEmpty As String = "▯"
+
     Private Function GenerateRandomCodeLineNumber() As Integer
         Return RandomGen.Next(0, CodeSourceList.Count)
     End Function
+
     Private Sub CoderWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         'Try loading code from external code file
         Dim ExternalCodeFilePath As String = AppDomain.CurrentDomain.SetupInformation.ApplicationBase & "\" & ExternalCodeSource

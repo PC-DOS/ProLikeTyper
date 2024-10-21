@@ -92,6 +92,9 @@
     <Compile Include="DownloaderWindow.xaml.vb">
       <DependentUpon>DownloaderWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NetScanWindow.xaml.vb">
+      <DependentUpon>NetScanWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ProductionMonitorWindow.xaml.vb">
       <DependentUpon>ProductionMonitorWindow.xaml</DependentUpon>
     </Compile>
@@ -128,6 +131,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NetScanWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ProductionMonitorWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

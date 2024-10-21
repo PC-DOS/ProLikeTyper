@@ -62,7 +62,8 @@
                     Dim CoderWindowInstance As New CoderWindow
                     CoderWindowInstance.Show()
                 Case "NETSCAN"
-
+                    Dim NetScanWindowInstance As New NetScanWindow
+                    NetScanWindowInstance.Show()
                 Case "SYSMON"
                     Dim SysMonWindowInstance As New SystemMonitorWindow
                     SysMonWindowInstance.Show()
