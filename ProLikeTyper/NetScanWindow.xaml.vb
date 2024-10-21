@@ -248,7 +248,7 @@ Public Class NetScanWindow
 
         'Avoid too long data buffer
         If ConsoleText.Length > MaxBufferSize Then
-            ConsoleText.Remove(0, ConsoleText.Length - MaxBufferSize)
+            ConsoleText = ConsoleText.Remove(0, ConsoleText.Length - MaxBufferSize)
         End If
 
         'Concat cursor

@@ -98,7 +98,7 @@ Public Class CoderWindow
 
         'Avoid too long data buffer
         If CodeText.Length > MaxBufferSize Then
-            CodeText.Remove(0, CodeText.Length - MaxBufferSize)
+            CodeText = CodeText.Remove(0, CodeText.Length - MaxBufferSize)
         End If
 
         'Concat cursor
