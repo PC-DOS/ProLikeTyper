@@ -127,6 +127,7 @@ Public Class NetScanWindow
                 StateMachine = NetScanStates.PrintingPingHeader
             Case NetScanStates.PrintingPingHeader
                 ConsoleText = ConsoleText & _
+                           "---- Availability Detection -----" & vbCrLf & _
                            "Sending ICMP sequence to " & HostIP & " for host availability checking..." & vbCrLf
                 StateMachine = NetScanStates.Ping1
             Case NetScanStates.Ping1
@@ -180,6 +181,7 @@ Public Class NetScanWindow
                 End If
             Case NetScanStates.ScaningVulnerability1
                 ConsoleText = ConsoleText & _
+                           "---- Vulnerability Detection -----" & vbCrLf & _
                            "Sending ACC_FAK_902 packet to " & HostIP & " for GSVA-22093 checking..." & vbCrLf
                 StateMachine = NetScanStates.PrintingVulnerability1Result
             Case NetScanStates.PrintingVulnerability1Result
@@ -194,7 +196,7 @@ Public Class NetScanWindow
                 StateMachine = NetScanStates.ScaningVulnerability2
             Case NetScanStates.ScaningVulnerability2
                 ConsoleText = ConsoleText & _
-                           "Sending RCL-REQ-I-3291 request to " & HostIP & ":" & RandomGen.Next(1024, 65536).ToString() & " for GSVA-23127 checking..." & vbCrLf
+                              "Sending RCL-REQ-I-3291 request to " & HostIP & ":" & RandomGen.Next(1024, 65536).ToString() & " for GSVA-23127 checking..." & vbCrLf
                 StateMachine = NetScanStates.PrintingVulnerability2Result
             Case NetScanStates.PrintingVulnerability2Result
                 If RandomGen.Next(0, 100) >= 95 Then
@@ -224,13 +226,16 @@ Public Class NetScanWindow
                 If IsHostAlive Then
                     If IsHostVulnerable Then
                         ConsoleText = ConsoleText & _
+                                   "---- Operation Finised ----" & vbCrLf & _
                                    "Host " & HostIP & " is alive with 1 or more vulnerabilities detected." & vbCrLf
                     Else
                         ConsoleText = ConsoleText & _
+                                   "---- Operation Finised ----" & vbCrLf & _
                                    "Host " & HostIP & " is alive." & vbCrLf
                     End If
                 Else
                     ConsoleText = ConsoleText & _
+                                "---- Operation Finised ----" & vbCrLf & _
                                "Host " & HostIP & " is unreachable. Switching to next host." & vbCrLf
                 End If
                 ConsoleText = ConsoleText & vbCrLf
