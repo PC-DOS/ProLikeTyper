@@ -72,6 +72,9 @@
                 Case "PRODMON"
                     Dim ProductionMonitorWindowInstance As New ProductionMonitorWindow
                     ProductionMonitorWindowInstance.Show()
+                Case "COMPILE"
+                    Dim CompilerWindowInstance As New CompilerWindow
+                    CompilerWindowInstance.Show()
                 Case "EXIT"
                     Application.Current.Shutdown()
                 Case Else

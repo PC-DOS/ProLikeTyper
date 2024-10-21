@@ -86,6 +86,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CompilerWindow.xaml.vb">
+      <DependentUpon>CompilerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DownloaderWindow.xaml.vb">
       <DependentUpon>DownloaderWindow.xaml</DependentUpon>
     </Compile>
@@ -98,6 +101,10 @@
     <Page Include="CoderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CompilerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="DownloaderWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -2,12 +2,12 @@
 Imports System.IO
 Imports System.Text
 Imports System.Windows.Threading
-Public Class DownloaderWindow
+Public Class CompilerWindow
     'Size of "file" and "database"
-    Const SingleFileSizeByteMax As Double = 64 * 1024 * 1024
-    Const SingleFileSizeByteMin As Double = 5 * 1024 * 1024
-    Const FileCountMax As Integer = 2450000
-    Const FileCountMin As Integer = 24500
+    Const SingleFileSizeByteMax As Double = 16 * 1024 * 1024
+    Const SingleFileSizeByteMin As Double = 1 * 1024 * 1024
+    Const FileCountMax As Integer = '24500
+    Const FileCountMin As Integer = '2450
     Const DownloadSpeedByteMax As Double = 45 * 1024 * 1024
     Const DownloadSpeedByteMin As Double = 25 * 1024 * 1024
     Const DownloadSpeedGeneratingInterval As Double = 50
@@ -53,19 +53,7 @@ Public Class DownloaderWindow
 
     Private Sub InitializeRemoteDatabaseData()
         'Generate database address
-        Dim DatabaseAddressSuffix As Integer = RandomGen.Next(1, 5)
-        Select Case DatabaseAddressSuffix
-            Case 1
-                CurrentDownloadingDatabaseLocation = "//192.0.2." & RandomGen.Next(1, 254).ToString() & "/"
-            Case 2
-                CurrentDownloadingDatabaseLocation = "//198.51.100." & RandomGen.Next(1, 254).ToString() & "/"
-            Case 3
-                CurrentDownloadingDatabaseLocation = "//203.0.113." & RandomGen.Next(1, 254).ToString() & "/"
-            Case 4
-                CurrentDownloadingDatabaseLocation = "//233.252.0." & RandomGen.Next(1, 254).ToString() & "/"
-            Case Else
-                CurrentDownloadingDatabaseLocation = "//203.0.113." & RandomGen.Next(1, 254).ToString() & "/"
-        End Select
+        CurrentDownloadingDatabaseLocation = "//localhost:" & RandomGen.Next(1024, 65536).ToString() & "/svc_base/"
 
         'Generate database directory
         CurrentDownloadingDatabaseLocation = CurrentDownloadingDatabaseLocation & Guid.NewGuid().ToString() & "/"
@@ -76,15 +64,63 @@ Public Class DownloaderWindow
     End Sub
 
     Private Sub GenerateNextFileInformation()
+        'Judge "file info" by current step
+        Select Case CurrentDownloadingFileIndex
+            Case 1
+                'Preprocessing
+                CurrentFilePath = "Preprocessing source directory """ & CurrentDownloadingDatabaseLocation & """..."
+                CurrentFileSizeTotalByte = SingleFileSizeByteMax * 5
+                CurrentFileSizeDownloadedByte = 0
+                Exit Sub
+            Case CurrentDownloadingDatabaseFileCount - 1
+                'Linking
+                CurrentFilePath = "Assembling compiled files in """ & CurrentDownloadingDatabaseLocation & "/.comp/temp/""..."
+                CurrentFileSizeTotalByte = SingleFileSizeByteMax * 4
+                CurrentFileSizeDownloadedByte = 0
+                Exit Sub
+            Case CurrentDownloadingDatabaseFileCount
+                'Linking
+                CurrentFilePath = "Linking compiled files to """ & CurrentDownloadingDatabaseLocation & "/.comp/out/""..."
+                CurrentFileSizeTotalByte = SingleFileSizeByteMax * 2
+                CurrentFileSizeDownloadedByte = 0
+                Exit Sub
+        End Select
+
         'Generate path
         CurrentFilePath = ""
-        Dim PathLevel As Integer = RandomGen.Next(1, 4)
+        Dim PathLevel As Integer = RandomGen.Next(1, 2)
         For i As Integer = 1 To PathLevel
-            CurrentFilePath = CurrentFilePath & GenerateRandomHexString(RandomGen.Next(5, 15)) & "/"
+            CurrentFilePath = CurrentFilePath & GenerateRandomHexString(RandomGen.Next(2, 10)) & "/"
         Next
 
         'Generate name
-        CurrentFilePath = CurrentFilePath & GenerateRandomHexString(RandomGen.Next(10, 25))
+        CurrentFilePath = CurrentFilePath & GenerateRandomHexString(RandomGen.Next(5, 15))
+        Dim SuffixID As Integer = RandomGen.Next(0, 10)
+        Select Case SuffixID
+            Case 0
+                CurrentFilePath = CurrentFilePath & ".vb"
+            Case 1
+                CurrentFilePath = CurrentFilePath & ".cpp"
+            Case 2
+                CurrentFilePath = CurrentFilePath & ".c"
+            Case 3
+                CurrentFilePath = CurrentFilePath & ".h"
+            Case 4
+                CurrentFilePath = CurrentFilePath & ".py"
+            Case 5
+                CurrentFilePath = CurrentFilePath & ".v"
+            Case 6
+                CurrentFilePath = CurrentFilePath & ".sch"
+            Case 7
+                CurrentFilePath = CurrentFilePath & ".pas"
+            Case 8
+                CurrentFilePath = CurrentFilePath & ".ui"
+            Case 9
+                CurrentFilePath = CurrentFilePath & ".xaml"
+            Case Else
+                CurrentFilePath = CurrentFilePath & ".vb"
+        End Select
+        CurrentFilePath = "Compiling """ & CurrentDownloadingDatabaseLocation & CurrentFilePath & """..."
 
         'Generate size
         CurrentFileSizeTotalByte = GenerateRandomDouble(SingleFileSizeByteMin, SingleFileSizeByteMax)
@@ -93,7 +129,7 @@ Public Class DownloaderWindow
 
     Private Sub RefreshStatusIndicator()
         'Current file
-        lblFileName.Text = CurrentDownloadingDatabaseLocation & CurrentFilePath
+        lblFileName.Text = CurrentFilePath
         prgDownloadCurrent.Minimum = 0
         prgDownloadCurrent.Maximum = CurrentFileSizeTotalByte
         prgDownloadCurrent.Value = CurrentFileSizeDownloadedByte
@@ -105,10 +141,11 @@ Public Class DownloaderWindow
         prgDownloadTotal.Minimum = 0
         prgDownloadTotal.Maximum = CurrentDownloadingDatabaseFileCount
         prgDownloadTotal.Value = CurrentDownloadingFileIndex - 1
-        lblFileCount.Text = (CurrentDownloadingFileIndex - 1).ToString() & " / " & CurrentDownloadingDatabaseFileCount.ToString & " Files"
+        lblFileCount.Text = (CurrentDownloadingFileIndex - 1).ToString() & " / " & CurrentDownloadingDatabaseFileCount.ToString & " Steps | 0 Errors | " & _
+                            DownloadSpeedDisplay.ToString() & " Warnings"
     End Sub
 
-    Private Sub DownloaderWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+    Private Sub ConpilerWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         'Generate data
         InitializeRemoteDatabaseData()
         GenerateNextFileInformation()
@@ -148,30 +185,14 @@ Public Class DownloaderWindow
             End If
         End If
 
-        'Allow download speed to be refreshed quickly
-        'Otherwise, it will keep 0 Mbps in first DownloadSpeedCalaculatingTimer interval
-        If IsDownloaderFirstRun Then
-            DownloadSpeedDisplay = CurrentDownloadSpeed * (DownloadSpeedCalaculatingInterval / DownloadSpeedGeneratingInterval)
-            IsDownloaderFirstRun = False
-        End If
-
         'Update indicators
         RefreshStatusIndicator()
     End Sub
 
     Private Sub DownloadSpeedCalaculatingTimer_Tick()
-        DownloadSpeedDisplay = CurrentDownloadSpeed
-        CurrentDownloadSpeed = 0
-    End Sub
-
-    Private Sub DownloaderWindow_SizeChanged(sender As Object, e As SizeChangedEventArgs) Handles Me.SizeChanged
-        'Change height of progress bars manually
-        If Me.ActualHeight <= 300 Then
-            prgDownloadCurrent.Height = 25
-            prgDownloadTotal.Height = 25
-        Else
-            prgDownloadCurrent.Height = 40
-            prgDownloadTotal.Height = 40
+        'Generate "warning" count
+        If RandomGen.Next(0, 1000) > 735 Then
+            DownloadSpeedDisplay += 1
         End If
     End Sub
 End Class
