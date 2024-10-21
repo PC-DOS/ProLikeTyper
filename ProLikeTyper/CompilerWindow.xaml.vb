@@ -6,8 +6,8 @@ Public Class CompilerWindow
     'Size of "file" and "database"
     Const SingleFileSizeByteMax As Double = 16 * 1024 * 1024
     Const SingleFileSizeByteMin As Double = 1 * 1024 * 1024
-    Const FileCountMax As Integer = '24500
-    Const FileCountMin As Integer = '2450
+    Const FileCountMax As Integer = 24500
+    Const FileCountMin As Integer = 2450
     Const DownloadSpeedByteMax As Double = 45 * 1024 * 1024
     Const DownloadSpeedByteMin As Double = 25 * 1024 * 1024
     Const DownloadSpeedGeneratingInterval As Double = 50
