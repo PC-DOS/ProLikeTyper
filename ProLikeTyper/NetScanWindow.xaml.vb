@@ -60,7 +60,7 @@ Public Class NetScanWindow
             If RandomGen.Next(0, 2) = 0 Then
                 HexResult = HexResult & Chr(RandomGen.Next(48, 57))
             Else
-                HexResult = HexResult & Chr(RandomGen.Next(97, 122))
+                HexResult = HexResult & Chr(RandomGen.Next(97, 103))
             End If
         Next
         Return HexResult
@@ -132,7 +132,7 @@ Public Class NetScanWindow
             Case NetScanStates.Ping1
                 If IsHostAlive Then
                     ConsoleText = ConsoleText & _
-                               "Reply from " & HostIP & ": bytes=32 " & "time=" & GenerateRandomDouble(ResponseTimeMin, ResponseTimeMax).ToString() & "ms, TTL=128" & vbCrLf
+                               "Reply from " & HostIP & ": bytes=32 " & "time=" & GenerateRandomDouble(ResponseTimeMin, ResponseTimeMax).ToString("F3") & "ms, TTL=128" & vbCrLf
                 Else
                     ConsoleText = ConsoleText & _
                                "Response timed out." & vbCrLf
@@ -141,7 +141,7 @@ Public Class NetScanWindow
             Case NetScanStates.Ping2
                 If IsHostAlive Then
                     ConsoleText = ConsoleText & _
-                               "Reply from " & HostIP & ": bytes=32 " & "time=" & GenerateRandomDouble(ResponseTimeMin, ResponseTimeMax).ToString() & "ms, TTL=128" & vbCrLf
+                               "Reply from " & HostIP & ": bytes=32 " & "time=" & GenerateRandomDouble(ResponseTimeMin, ResponseTimeMax).ToString("F3") & "ms, TTL=128" & vbCrLf
                 Else
                     ConsoleText = ConsoleText & _
                                "Response timed out." & vbCrLf
@@ -150,7 +150,7 @@ Public Class NetScanWindow
             Case NetScanStates.Ping3
                 If IsHostAlive Then
                     ConsoleText = ConsoleText & _
-                               "Reply from " & HostIP & ": bytes=32 " & "time=" & GenerateRandomDouble(ResponseTimeMin, ResponseTimeMax).ToString() & "ms, TTL=128" & vbCrLf
+                               "Reply from " & HostIP & ": bytes=32 " & "time=" & GenerateRandomDouble(ResponseTimeMin, ResponseTimeMax).ToString("F3") & "ms, TTL=128" & vbCrLf
                 Else
                     ConsoleText = ConsoleText & _
                                "Response timed out." & vbCrLf
@@ -159,7 +159,7 @@ Public Class NetScanWindow
             Case NetScanStates.Ping4
                 If IsHostAlive Then
                     ConsoleText = ConsoleText & _
-                               "Reply from " & HostIP & ": bytes=32 " & "time=" & GenerateRandomDouble(ResponseTimeMin, ResponseTimeMax).ToString() & "ms, TTL=128" & vbCrLf
+                               "Reply from " & HostIP & ": bytes=32 " & "time=" & GenerateRandomDouble(ResponseTimeMin, ResponseTimeMax).ToString("F3") & "ms, TTL=128" & vbCrLf
                 Else
                     ConsoleText = ConsoleText & _
                                "Response timed out." & vbCrLf
@@ -180,7 +180,7 @@ Public Class NetScanWindow
                 End If
             Case NetScanStates.ScaningVulnerability1
                 ConsoleText = ConsoleText & _
-                           "Sending ACC_FAK_902 packet to " & HostIP & "for GSVA-22093 checking..." & vbCrLf
+                           "Sending ACC_FAK_902 packet to " & HostIP & " for GSVA-22093 checking..." & vbCrLf
                 StateMachine = NetScanStates.PrintingVulnerability1Result
             Case NetScanStates.PrintingVulnerability1Result
                 If RandomGen.Next(0, 100) >= 95 Then
@@ -194,7 +194,7 @@ Public Class NetScanWindow
                 StateMachine = NetScanStates.ScaningVulnerability2
             Case NetScanStates.ScaningVulnerability2
                 ConsoleText = ConsoleText & _
-                           "Sending RCL-REQ-I-3291 request to " & HostIP & ":" & RandomGen.Next(1024, 65536).ToString() & "for GSVA-23127 checking..." & vbCrLf
+                           "Sending RCL-REQ-I-3291 request to " & HostIP & ":" & RandomGen.Next(1024, 65536).ToString() & " for GSVA-23127 checking..." & vbCrLf
                 StateMachine = NetScanStates.PrintingVulnerability2Result
             Case NetScanStates.PrintingVulnerability2Result
                 If RandomGen.Next(0, 100) >= 95 Then
@@ -208,7 +208,7 @@ Public Class NetScanWindow
                 StateMachine = NetScanStates.ScaningVulnerability3
             Case NetScanStates.ScaningVulnerability3
                 ConsoleText = ConsoleText & _
-                           "Sending WSSP_QUERY_VERSION request to " & HostIP & "for GSVA-23542 checking..." & vbCrLf
+                           "Sending WSSP_QUERY_VERSION request to " & HostIP & " for GSVA-23542 checking..." & vbCrLf
                 StateMachine = NetScanStates.PrintingVulnerability3Result
             Case NetScanStates.PrintingVulnerability3Result
                 If RandomGen.Next(0, 100) >= 95 Then

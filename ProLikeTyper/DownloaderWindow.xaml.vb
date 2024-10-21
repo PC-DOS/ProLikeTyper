@@ -48,7 +48,7 @@ Public Class DownloaderWindow
             If RandomGen.Next(0, 2) = 0 Then
                 HexResult = HexResult & Chr(RandomGen.Next(48, 57))
             Else
-                HexResult = HexResult & Chr(RandomGen.Next(97, 122))
+                HexResult = HexResult & Chr(RandomGen.Next(97, 103))
             End If
         Next
         Return HexResult
