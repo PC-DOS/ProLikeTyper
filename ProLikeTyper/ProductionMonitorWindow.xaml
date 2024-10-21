@@ -26,7 +26,7 @@
                                 BorderBrush="Black"  
                                 BorderThickness="0" 
                                 HorizontalAlignment="Left"
-                                Margin="2" />
+                                Margin="3" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <!-- Getting vertical style working using technique described here: http://stackoverflow.com/a/6849237/7532 -->
