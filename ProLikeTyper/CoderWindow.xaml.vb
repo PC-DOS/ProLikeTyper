@@ -4,7 +4,7 @@ Imports System.Text
 Imports System.Windows.Threading
 Public Class CoderWindow
     'Timer object for "coding"
-    Const MaxBufferSize As Integer = 8192
+    Const MaxBufferSize As Integer = 16384
     Const TypingInterval As Double = 25
     Const CursorFalshingInterval As Double = 500
     Dim CoderTimer As New DispatcherTimer(DispatcherPriority.Render)

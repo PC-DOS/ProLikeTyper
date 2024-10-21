@@ -4,7 +4,7 @@ Imports System.Text
 Imports System.Windows.Threading
 Public Class NetScanWindow
     'Timer object for simulated console
-    Const MaxBufferSize As Integer = 8192
+    Const MaxBufferSize As Integer = 16384
     Const UpdatingInterval As Double = 735
     Const CursorFalshingInterval As Double = 500
     Dim ConsoleTimer As New DispatcherTimer(DispatcherPriority.Render)
