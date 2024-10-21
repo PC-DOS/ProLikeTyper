@@ -26,7 +26,7 @@ Class MainWindow
                                         WindowInstance.Show()
                                         'Start window's event loop
                                         System.Windows.Threading.Dispatcher.Run()
-                                        'Set tasks result
+                                        'Set task's result
                                         TaskComp.SetResult(Nothing)
                                     End Sub)
 
