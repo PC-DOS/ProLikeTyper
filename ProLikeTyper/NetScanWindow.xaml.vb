@@ -226,16 +226,16 @@ Public Class NetScanWindow
                 If IsHostAlive Then
                     If IsHostVulnerable Then
                         ConsoleText = ConsoleText & _
-                                   "---- Operation Finised ----" & vbCrLf & _
+                                   "---- Operation Finised: Alive & Vulnerable ----" & vbCrLf & _
                                    "Host " & HostIP & " is alive with 1 or more vulnerabilities detected." & vbCrLf
                     Else
                         ConsoleText = ConsoleText & _
-                                   "---- Operation Finised ----" & vbCrLf & _
+                                   "---- Operation Finised: Alive ----" & vbCrLf & _
                                    "Host " & HostIP & " is alive." & vbCrLf
                     End If
                 Else
                     ConsoleText = ConsoleText & _
-                                "---- Operation Finised ----" & vbCrLf & _
+                                "---- Operation Finised: Unreachable ----" & vbCrLf & _
                                "Host " & HostIP & " is unreachable. Switching to next host." & vbCrLf
                 End If
                 ConsoleText = ConsoleText & vbCrLf
