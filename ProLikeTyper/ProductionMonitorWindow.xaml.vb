@@ -18,7 +18,7 @@ Public Class ProductionMonitorWindow
     Dim RandomGen As New Random
 
     'Timers
-    Dim DataUpdateTimer As New DispatcherTimer
+    Dim DataUpdateTimer As New DispatcherTimer(DispatcherPriority.Render)
     Private Function GenerateRandomDouble(ValMin As Double, ValMax As Double) As Double
         Return RandomGen.NextDouble() * (ValMax - ValMin) + ValMin
     End Function

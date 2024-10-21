@@ -27,8 +27,8 @@ Public Class CompilerWindow
     Dim RandomGen As New Random
 
     'Compiler simulation timer
-    Dim ProcessingTimer As New DispatcherTimer
-    Dim ProcessingSpeedCalaculatingTimer As New DispatcherTimer
+    Dim ProcessingTimer As New DispatcherTimer(DispatcherPriority.Render)
+    Dim ProcessingSpeedCalaculatingTimer As New DispatcherTimer(DispatcherPriority.Render)
     Dim CurrentProcessingSpeed As Double
     Dim ProcessingSpeedDisplay As Double
 

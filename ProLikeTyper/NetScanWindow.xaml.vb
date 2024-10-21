@@ -3,11 +3,12 @@ Imports System.IO
 Imports System.Text
 Imports System.Windows.Threading
 Public Class NetScanWindow
-    'Timer object for "coding"
+    'Timer object for simulated console
+    Const MaxBufferSize As Integer = 8192
     Const UpdatingInterval As Double = 735
     Const CursorFalshingInterval As Double = 500
-    Dim ConsoleTimer As New DispatcherTimer()
-    Dim CursorTimer As New DispatcherTimer()
+    Dim ConsoleTimer As New DispatcherTimer(DispatcherPriority.Render)
+    Dim CursorTimer As New DispatcherTimer(DispatcherPriority.Render)
 
     'Global randowm generator
     Dim RandomGen As New Random
@@ -244,6 +245,11 @@ Public Class NetScanWindow
                 GenerateNextHost()
                 StateMachine = NetScanStates.SelectingAddress
         End Select
+
+        'Avoid too long data buffer
+        If ConsoleText.Length > MaxBufferSize Then
+            ConsoleText.Remove(0, ConsoleText.Length - MaxBufferSize)
+        End If
 
         'Concat cursor
         If IsConsoleCursorVisible Then

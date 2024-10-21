@@ -14,7 +14,7 @@ Public Class SystemMonitorWindow
     'CPU data buffer and timer
     'Performace counter and timer
     Dim CPUCounter As PerformanceCounter
-    Dim CPUDataCollectingTimer As New DispatcherTimer
+    Dim CPUDataCollectingTimer As New DispatcherTimer(DispatcherPriority.Render)
     'Data plotting related
     Dim CPUHistoryPlotter As New LineSeries
     Dim CPUHistoryDataSeries As OxyPlot.Series.LineSeries
@@ -24,7 +24,7 @@ Public Class SystemMonitorWindow
     'RAM data buffer and timer
     'Performace counter and timer
     Dim RAMCounter As New Microsoft.VisualBasic.Devices.ComputerInfo
-    Dim RAMDataCollectingTimer As New DispatcherTimer
+    Dim RAMDataCollectingTimer As New DispatcherTimer(DispatcherPriority.Render)
     'Data plotting related
     Dim RAMHistoryPlotter As New LineSeries
     Dim RAMHistoryDataSeries As OxyPlot.Series.LineSeries
@@ -35,7 +35,7 @@ Public Class SystemMonitorWindow
     'Performace counter and timer
     Dim DiskReadCounter As PerformanceCounter
     Dim DiskWriteCounter As PerformanceCounter
-    Dim DiskDataCollectingTimer As New DispatcherTimer
+    Dim DiskDataCollectingTimer As New DispatcherTimer(DispatcherPriority.Render)
     'Data plotting related
     Dim DiskReadHistoryPlotter As New LineSeries
     Dim DiskReadHistoryDataSeries As OxyPlot.Series.LineSeries

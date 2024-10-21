@@ -33,8 +33,8 @@ Public Class TrainWindow
     Dim RandomGen As New Random
 
     'Training simulation timer
-    Dim TrainingTimer As New DispatcherTimer
-    Dim TrainingSpeedCalaculatingTimer As New DispatcherTimer
+    Dim TrainingTimer As New DispatcherTimer(DispatcherPriority.Render)
+    Dim TrainingSpeedCalaculatingTimer As New DispatcherTimer(DispatcherPriority.Render)
     Dim CurrentTrainingSpeed As Double
     Dim TrainingSpeedDisplay As Double
     Dim IsTrainFirstRun As Boolean = True

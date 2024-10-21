@@ -27,8 +27,8 @@ Public Class DownloaderWindow
     Dim RandomGen As New Random
 
     'Downloader simulation timer
-    Dim FileDownloadTimer As New DispatcherTimer
-    Dim DownloadSpeedCalaculatingTimer As New DispatcherTimer
+    Dim FileDownloadTimer As New DispatcherTimer(DispatcherPriority.Render)
+    Dim DownloadSpeedCalaculatingTimer As New DispatcherTimer(DispatcherPriority.Render)
     Dim CurrentDownloadSpeed As Double
     Dim DownloadSpeedDisplay As Double
     Dim IsDownloaderFirstRun As Boolean = True
