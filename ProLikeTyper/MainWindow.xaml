@@ -20,7 +20,8 @@
                 <ListBoxItem Content="SysMon" Background="#FF646464" Foreground="White" Tag="SYSMON_Sytem monitoring" />
                 <ListBoxItem Content="PullData" Background="#FF646464" Foreground="White" Tag="PULLDATA_Simulates data pulling from remote" />
                 <ListBoxItem Content="ProdMon" Background="#FF646464" Foreground="White" Tag="PRODMON_Simulates a production monitoring system" />
-                <ListBoxItem Content="Compile" Background="#FF646464" Foreground="White" Tag="COMPILE_Simulates a production compiling screen" />
+                <ListBoxItem Content="Compile" Background="#FF646464" Foreground="White" Tag="COMPILE_Simulates a compiling screen" />
+                <ListBoxItem Content="Train" Background="#FF646464" Foreground="White" Tag="TRAIN_Simulates a neural network training screen" />
                 <ListBoxItem Content="Exit" Background="#FF646464" Foreground="White" Tag="EXIT_Stop all executing commands and exit" />
             </ListBox>
         </Grid>

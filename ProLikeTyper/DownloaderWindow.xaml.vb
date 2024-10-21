@@ -101,11 +101,11 @@ Public Class DownloaderWindow
                          ByteToMByte(CurrentFileSizeTotalByte).ToString("F2") & " MB, " & _
                          ByteToMByte(DownloadSpeedDisplay).ToString("F2") * 8 & " Mbps"
 
-        'Current Database
+        'Current database
         prgDownloadTotal.Minimum = 0
         prgDownloadTotal.Maximum = CurrentDownloadingDatabaseFileCount
         prgDownloadTotal.Value = CurrentDownloadingFileIndex - 1
-        lblFileCount.Text = (CurrentDownloadingFileIndex - 1).ToString() & " / " & CurrentDownloadingDatabaseFileCount.ToString & " Files"
+        lblFileCount.Text = (CurrentDownloadingFileIndex - 1).ToString() & " / " & CurrentDownloadingDatabaseFileCount.ToString() & " Files"
     End Sub
 
     Private Sub DownloaderWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded

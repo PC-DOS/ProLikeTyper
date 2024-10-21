@@ -75,6 +75,9 @@
                 Case "COMPILE"
                     Dim CompilerWindowInstance As New CompilerWindow
                     CompilerWindowInstance.Show()
+                Case "TRAIN"
+                    Dim TrainWindowInstance As New TrainWindow
+                    TrainWindowInstance.Show()
                 Case "EXIT"
                     Application.Current.Shutdown()
                 Case Else

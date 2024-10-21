@@ -98,6 +98,9 @@
     <Compile Include="SystemMonitorWindow.xaml.vb">
       <DependentUpon>SystemMonitorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TrainWindow.xaml.vb">
+      <DependentUpon>TrainWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="CoderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -130,6 +133,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SystemMonitorWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TrainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

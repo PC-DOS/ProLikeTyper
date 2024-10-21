@@ -4,34 +4,33 @@ Imports System.Text
 Imports System.Windows.Threading
 Public Class CompilerWindow
     'Size of "file" and "database"
-    Const SingleFileSizeByteMax As Double = 16 * 1024 * 1024
-    Const SingleFileSizeByteMin As Double = 1 * 1024 * 1024
-    Const FileCountMax As Integer = 24500
-    Const FileCountMin As Integer = 2450
-    Const DownloadSpeedByteMax As Double = 45 * 1024 * 1024
-    Const DownloadSpeedByteMin As Double = 25 * 1024 * 1024
-    Const DownloadSpeedGeneratingInterval As Double = 50
-    Const DownloadSpeedCalaculatingInterval As Double = 1000
+    Const SingleStepSizeByteMax As Double = 16 * 1024 * 1024
+    Const SingleStepSizeByteMin As Double = 1 * 1024 * 1024
+    Const StepCountMax As Integer = 24500
+    Const StepCountMin As Integer = 2450
+    Const ProcessingSpeedByteMax As Double = 45 * 1024 * 1024
+    Const ProcessingSpeedByteMin As Double = 25 * 1024 * 1024
+    Const ProcessingSpeedGeneratingInterval As Double = 50
+    Const ProcessingSpeedCalaculatingInterval As Double = 1000
 
-    'Data of current downloading file
-    Dim CurrentFilePath As String
-    Dim CurrentFileSizeTotalByte As Double
-    Dim CurrentFileSizeDownloadedByte As Double
+    'Data of current compiling step
+    Dim CurrentStepName As String
+    Dim CurrentStepSizeTotalByte As Double
+    Dim CurrentStepSizeProcessedByte As Double
 
-    'Data of current downloading database
-    Dim CurrentDownloadingDatabaseLocation As String
-    Dim CurrentDownloadingDatabaseFileCount As Integer
-    Dim CurrentDownloadingFileIndex As Integer
+    'Data of current codebase
+    Dim CurrentCodebaseLocation As String
+    Dim CurrentCodebaseStepCount As Integer
+    Dim CurrentStepIndex As Integer
 
     'Global randowm generator
     Dim RandomGen As New Random
 
-    'Downloader simulation timer
-    Dim FileDownloadTimer As New DispatcherTimer
-    Dim DownloadSpeedCalaculatingTimer As New DispatcherTimer
-    Dim CurrentDownloadSpeed As Double
-    Dim DownloadSpeedDisplay As Double
-    Dim IsDownloaderFirstRun As Boolean = True
+    'Compiler simulation timer
+    Dim ProcessingTimer As New DispatcherTimer
+    Dim ProcessingSpeedCalaculatingTimer As New DispatcherTimer
+    Dim CurrentProcessingSpeed As Double
+    Dim ProcessingSpeedDisplay As Double
     Private Function GenerateRandomDouble(ValMin As Double, ValMax As Double) As Double
         Return RandomGen.NextDouble() * (ValMax - ValMin) + ValMin
     End Function
@@ -51,137 +50,137 @@ Public Class CompilerWindow
         Return HexResult
     End Function
 
-    Private Sub InitializeRemoteDatabaseData()
-        'Generate database address
-        CurrentDownloadingDatabaseLocation = "//localhost:" & RandomGen.Next(1024, 65536).ToString() & "/svc_base/"
+    Private Sub InitializeCodebaseData()
+        'Generate codebase address
+        CurrentCodebaseLocation = "//localhost:" & RandomGen.Next(1024, 65536).ToString() & "/svc_base/"
 
-        'Generate database directory
-        CurrentDownloadingDatabaseLocation = CurrentDownloadingDatabaseLocation & Guid.NewGuid().ToString() & "/"
+        'Generate codebase directory
+        CurrentCodebaseLocation = CurrentCodebaseLocation & Guid.NewGuid().ToString() & "/"
 
-        'Generate file count
-        CurrentDownloadingDatabaseFileCount = RandomGen.Next(FileCountMin, FileCountMax + 1)
-        CurrentDownloadingFileIndex = 1
+        'Generate step count
+        CurrentCodebaseStepCount = RandomGen.Next(StepCountMin, StepCountMax + 1)
+        CurrentStepIndex = 1
     End Sub
 
-    Private Sub GenerateNextFileInformation()
-        'Judge "file info" by current step
-        Select Case CurrentDownloadingFileIndex
+    Private Sub GenerateNextStepInformation()
+        'Judge "step info" by current step
+        Select Case CurrentStepIndex
             Case 1
                 'Preprocessing
-                CurrentFilePath = "Preprocessing source directory """ & CurrentDownloadingDatabaseLocation & """..."
-                CurrentFileSizeTotalByte = SingleFileSizeByteMax * 5
-                CurrentFileSizeDownloadedByte = 0
+                CurrentStepName = "Preprocessing source directory """ & CurrentCodebaseLocation & """..."
+                CurrentStepSizeTotalByte = SingleStepSizeByteMax * 5
+                CurrentStepSizeProcessedByte = 0
                 Exit Sub
-            Case CurrentDownloadingDatabaseFileCount - 1
-                'Linking
-                CurrentFilePath = "Assembling compiled files in """ & CurrentDownloadingDatabaseLocation & "/.comp/temp/""..."
-                CurrentFileSizeTotalByte = SingleFileSizeByteMax * 4
-                CurrentFileSizeDownloadedByte = 0
+            Case CurrentCodebaseStepCount - 1
+                'Assembling
+                CurrentStepName = "Assembling compiled files in """ & CurrentCodebaseLocation & "/.comp/temp/""..."
+                CurrentStepSizeTotalByte = SingleStepSizeByteMax * 4
+                CurrentStepSizeProcessedByte = 0
                 Exit Sub
-            Case CurrentDownloadingDatabaseFileCount
+            Case CurrentCodebaseStepCount
                 'Linking
-                CurrentFilePath = "Linking compiled files to """ & CurrentDownloadingDatabaseLocation & "/.comp/out/""..."
-                CurrentFileSizeTotalByte = SingleFileSizeByteMax * 2
-                CurrentFileSizeDownloadedByte = 0
+                CurrentStepName = "Linking compiled files to """ & CurrentCodebaseLocation & "/.comp/out/""..."
+                CurrentStepSizeTotalByte = SingleStepSizeByteMax * 2
+                CurrentStepSizeProcessedByte = 0
                 Exit Sub
         End Select
 
         'Generate path
-        CurrentFilePath = ""
+        CurrentStepName = ""
         Dim PathLevel As Integer = RandomGen.Next(1, 2)
         For i As Integer = 1 To PathLevel
-            CurrentFilePath = CurrentFilePath & GenerateRandomHexString(RandomGen.Next(2, 10)) & "/"
+            CurrentStepName = CurrentStepName & GenerateRandomHexString(RandomGen.Next(2, 10)) & "/"
         Next
 
         'Generate name
-        CurrentFilePath = CurrentFilePath & GenerateRandomHexString(RandomGen.Next(5, 15))
+        CurrentStepName = CurrentStepName & GenerateRandomHexString(RandomGen.Next(5, 15))
         Dim SuffixID As Integer = RandomGen.Next(0, 10)
         Select Case SuffixID
             Case 0
-                CurrentFilePath = CurrentFilePath & ".vb"
+                CurrentStepName = CurrentStepName & ".vb"
             Case 1
-                CurrentFilePath = CurrentFilePath & ".cpp"
+                CurrentStepName = CurrentStepName & ".cpp"
             Case 2
-                CurrentFilePath = CurrentFilePath & ".c"
+                CurrentStepName = CurrentStepName & ".c"
             Case 3
-                CurrentFilePath = CurrentFilePath & ".h"
+                CurrentStepName = CurrentStepName & ".h"
             Case 4
-                CurrentFilePath = CurrentFilePath & ".py"
+                CurrentStepName = CurrentStepName & ".py"
             Case 5
-                CurrentFilePath = CurrentFilePath & ".v"
+                CurrentStepName = CurrentStepName & ".v"
             Case 6
-                CurrentFilePath = CurrentFilePath & ".sch"
+                CurrentStepName = CurrentStepName & ".sch"
             Case 7
-                CurrentFilePath = CurrentFilePath & ".pas"
+                CurrentStepName = CurrentStepName & ".pas"
             Case 8
-                CurrentFilePath = CurrentFilePath & ".ui"
+                CurrentStepName = CurrentStepName & ".ui"
             Case 9
-                CurrentFilePath = CurrentFilePath & ".xaml"
+                CurrentStepName = CurrentStepName & ".xaml"
             Case Else
-                CurrentFilePath = CurrentFilePath & ".vb"
+                CurrentStepName = CurrentStepName & ".vb"
         End Select
-        CurrentFilePath = "Compiling """ & CurrentDownloadingDatabaseLocation & CurrentFilePath & """..."
+        CurrentStepName = "Compiling """ & CurrentCodebaseLocation & CurrentStepName & """..."
 
         'Generate size
-        CurrentFileSizeTotalByte = GenerateRandomDouble(SingleFileSizeByteMin, SingleFileSizeByteMax)
-        CurrentFileSizeDownloadedByte = 0
+        CurrentStepSizeTotalByte = GenerateRandomDouble(SingleStepSizeByteMin, SingleStepSizeByteMax)
+        CurrentStepSizeProcessedByte = 0
     End Sub
 
     Private Sub RefreshStatusIndicator()
-        'Current file
-        lblFileName.Text = CurrentFilePath
-        prgDownloadCurrent.Minimum = 0
-        prgDownloadCurrent.Maximum = CurrentFileSizeTotalByte
-        prgDownloadCurrent.Value = CurrentFileSizeDownloadedByte
-        lblFileSize.Text = ByteToMByte(CurrentFileSizeDownloadedByte).ToString("F2") & " MB / " & _
-                         ByteToMByte(CurrentFileSizeTotalByte).ToString("F2") & " MB, " & _
-                         ByteToMByte(DownloadSpeedDisplay).ToString("F2") * 8 & " Mbps"
+        'Current step
+        lblStepName.Text = CurrentStepName
+        prgCurrent.Minimum = 0
+        prgCurrent.Maximum = CurrentStepSizeTotalByte
+        prgCurrent.Value = CurrentStepSizeProcessedByte
+        lblStepSize.Text = ByteToMByte(CurrentStepSizeProcessedByte).ToString("F2") & " MB / " & _
+                           ByteToMByte(CurrentStepSizeTotalByte).ToString("F2") & " MB, " & _
+                           ByteToMByte(ProcessingSpeedDisplay).ToString("F2") * 8 & " Mbps"
 
-        'Current Database
-        prgDownloadTotal.Minimum = 0
-        prgDownloadTotal.Maximum = CurrentDownloadingDatabaseFileCount
-        prgDownloadTotal.Value = CurrentDownloadingFileIndex - 1
-        lblFileCount.Text = (CurrentDownloadingFileIndex - 1).ToString() & " / " & CurrentDownloadingDatabaseFileCount.ToString & " Steps | 0 Errors | " & _
-                            DownloadSpeedDisplay.ToString() & " Warnings"
+        'Current codebase
+        prgTotalProgress.Minimum = 0
+        prgTotalProgress.Maximum = CurrentCodebaseStepCount
+        prgTotalProgress.Value = CurrentStepIndex - 1
+        lblTotalProgress.Text = (CurrentStepIndex - 1).ToString() & " / " & CurrentCodebaseStepCount.ToString() & " Steps | 0 Errors | " & _
+                            ProcessingSpeedDisplay.ToString() & " Warnings"
     End Sub
 
-    Private Sub ConpilerWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+    Private Sub CompilerWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         'Generate data
-        InitializeRemoteDatabaseData()
-        GenerateNextFileInformation()
-        CurrentDownloadSpeed = 0
-        DownloadSpeedDisplay = 0
+        InitializeCodebaseData()
+        GenerateNextStepInformation()
+        CurrentProcessingSpeed = 0
+        ProcessingSpeedDisplay = 0
         RefreshStatusIndicator()
 
         'Initialize timers
-        AddHandler FileDownloadTimer.Tick, AddressOf FileDownloadTimer_Tick
-        FileDownloadTimer.Interval = TimeSpan.FromMilliseconds(DownloadSpeedGeneratingInterval)
-        FileDownloadTimer.Start()
-        AddHandler DownloadSpeedCalaculatingTimer.Tick, AddressOf DownloadSpeedCalaculatingTimer_Tick
-        DownloadSpeedCalaculatingTimer.Interval = TimeSpan.FromMilliseconds(DownloadSpeedCalaculatingInterval)
-        DownloadSpeedCalaculatingTimer.Start()
+        AddHandler ProcessingTimer.Tick, AddressOf ProcessingTimer_Tick
+        ProcessingTimer.Interval = TimeSpan.FromMilliseconds(ProcessingSpeedGeneratingInterval)
+        ProcessingTimer.Start()
+        AddHandler ProcessingSpeedCalaculatingTimer.Tick, AddressOf ProcessingSpeedCalaculatingTimer_Tick
+        ProcessingSpeedCalaculatingTimer.Interval = TimeSpan.FromMilliseconds(ProcessingSpeedCalaculatingInterval)
+        ProcessingSpeedCalaculatingTimer.Start()
     End Sub
 
-    Private Sub FileDownloadTimer_Tick()
-        'Generate one-shot download speed
-        'Generating interval is scaled by  (DownloadSpeedCalaculatingInterval / DownloadSpeedGeneratingInterval) from 1000 milliseconds
-        Dim DownloadSpeedOnce As Double
-        DownloadSpeedOnce = GenerateRandomDouble(DownloadSpeedByteMin, DownloadSpeedByteMax)
-        DownloadSpeedOnce = DownloadSpeedOnce / (DownloadSpeedCalaculatingInterval / DownloadSpeedGeneratingInterval)
+    Private Sub ProcessingTimer_Tick()
+        'Generate one-shot processing speed
+        'Generating interval is scaled by  (ProcessingSpeedCalaculatingInterval / ProcessingSpeedGeneratingInterval) from 1000 milliseconds
+        Dim ProcessingSpeedOnce As Double
+        ProcessingSpeedOnce = GenerateRandomDouble(ProcessingSpeedByteMin, ProcessingSpeedByteMax)
+        ProcessingSpeedOnce = ProcessingSpeedOnce / (ProcessingSpeedCalaculatingInterval / ProcessingSpeedGeneratingInterval)
         'Avoid exceeding remaining file size
-        DownloadSpeedOnce = Math.Min(DownloadSpeedOnce, CurrentFileSizeTotalByte - CurrentFileSizeDownloadedByte)
+        ProcessingSpeedOnce = Math.Min(ProcessingSpeedOnce, CurrentStepSizeTotalByte - CurrentStepSizeProcessedByte)
 
-        'Simulate downloading
-        CurrentFileSizeDownloadedByte += DownloadSpeedOnce
-        CurrentDownloadSpeed += DownloadSpeedOnce
+        'Simulate processing
+        CurrentStepSizeProcessedByte += ProcessingSpeedOnce
+        CurrentProcessingSpeed += ProcessingSpeedOnce
 
-        'Check if we need to proceed to to next file
-        If CurrentFileSizeDownloadedByte >= CurrentFileSizeTotalByte Then
-            CurrentDownloadingFileIndex += 1
-            GenerateNextFileInformation()
-            If CurrentDownloadingFileIndex > CurrentDownloadingDatabaseFileCount Then
-                InitializeRemoteDatabaseData()
-                GenerateNextFileInformation()
+        'Check if we need to proceed to to next step
+        If CurrentStepSizeProcessedByte >= CurrentStepSizeTotalByte Then
+            CurrentStepIndex += 1
+            GenerateNextStepInformation()
+            If CurrentStepIndex > CurrentCodebaseStepCount Then
+                InitializeCodebaseData()
+                GenerateNextStepInformation()
             End If
         End If
 
@@ -189,10 +188,10 @@ Public Class CompilerWindow
         RefreshStatusIndicator()
     End Sub
 
-    Private Sub DownloadSpeedCalaculatingTimer_Tick()
+    Private Sub ProcessingSpeedCalaculatingTimer_Tick()
         'Generate "warning" count
         If RandomGen.Next(0, 1000) > 735 Then
-            DownloadSpeedDisplay += 1
+            ProcessingSpeedDisplay += 1
         End If
     End Sub
 End Class
