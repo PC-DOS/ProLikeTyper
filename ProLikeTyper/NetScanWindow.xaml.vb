@@ -4,24 +4,17 @@ Imports System.Text
 Imports System.Windows.Threading
 Public Class NetScanWindow
     'Timer object for "coding"
-    Const TypingInterval As Double = 735
+    Const UpdatingInterval As Double = 735
     Const CursorFalshingInterval As Double = 500
-    Dim CoderTimer As New DispatcherTimer()
+    Dim ConsoleTimer As New DispatcherTimer()
     Dim CursorTimer As New DispatcherTimer()
 
     'Global randowm generator
     Dim RandomGen As New Random
 
-    'Code source
-    Const InternalCodeSource As String = "CoderText.txt"
-    Const ExternalCodeSource As String = "CoderText.txt"
-    Dim CodeSourceList As New List(Of String)
-    Dim CodeSourceLinePointer As Integer
-    Dim CodeSourceColumnPointer As Integer
-
-    'Display text of code
-    Dim CodeText As String = ""
-    Dim CodeTextDisplay As String = ""
+    'Display text of console
+    Dim ConsoleText As String = ""
+    Dim ConsoleTextDisplay As String = ""
 
     'Host info
     Const ResponseTimeMax As Double = 2.45
@@ -114,70 +107,70 @@ Public Class NetScanWindow
         'Initialize scan
         InitializeNewScan()
         GenerateNextHost()
-        CodeText = ""
+        ConsoleText = ""
 
         'Initialize timers
-        AddHandler CoderTimer.Tick, AddressOf CoderTimer_Tick
-        CoderTimer.Interval = TimeSpan.FromMilliseconds(TypingInterval)
-        CoderTimer.Start()
+        AddHandler ConsoleTimer.Tick, AddressOf ConsoleTimer_Tick
+        ConsoleTimer.Interval = TimeSpan.FromMilliseconds(UpdatingInterval)
+        ConsoleTimer.Start()
         AddHandler CursorTimer.Tick, AddressOf CursorTimer_Tick
         CursorTimer.Interval = TimeSpan.FromMilliseconds(CursorFalshingInterval)
         CursorTimer.Start()
     End Sub
 
-    Private Sub CoderTimer_Tick()
+    Private Sub ConsoleTimer_Tick()
         'State judging & updating
         Select Case StateMachine
             Case NetScanStates.SelectingAddress
-                CodeText = CodeText & _
+                ConsoleText = ConsoleText & _
                            "Current target: " & HostIP & vbCrLf
                 StateMachine = NetScanStates.PrintingPingHeader
             Case NetScanStates.PrintingPingHeader
-                CodeText = CodeText & _
+                ConsoleText = ConsoleText & _
                            "Sending ICMP sequence to " & HostIP & " for host availability checking..." & vbCrLf
                 StateMachine = NetScanStates.Ping1
             Case NetScanStates.Ping1
                 If IsHostAlive Then
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Reply from " & HostIP & ": bytes=32 " & "time=" & GenerateRandomDouble(ResponseTimeMin, ResponseTimeMax).ToString() & "ms, TTL=128" & vbCrLf
                 Else
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Response timed out." & vbCrLf
                 End If
                 StateMachine = NetScanStates.Ping2
             Case NetScanStates.Ping2
                 If IsHostAlive Then
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Reply from " & HostIP & ": bytes=32 " & "time=" & GenerateRandomDouble(ResponseTimeMin, ResponseTimeMax).ToString() & "ms, TTL=128" & vbCrLf
                 Else
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Response timed out." & vbCrLf
                 End If
                 StateMachine = NetScanStates.Ping3
             Case NetScanStates.Ping3
                 If IsHostAlive Then
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Reply from " & HostIP & ": bytes=32 " & "time=" & GenerateRandomDouble(ResponseTimeMin, ResponseTimeMax).ToString() & "ms, TTL=128" & vbCrLf
                 Else
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Response timed out." & vbCrLf
                 End If
                 StateMachine = NetScanStates.Ping4
             Case NetScanStates.Ping4
                 If IsHostAlive Then
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Reply from " & HostIP & ": bytes=32 " & "time=" & GenerateRandomDouble(ResponseTimeMin, ResponseTimeMax).ToString() & "ms, TTL=128" & vbCrLf
                 Else
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Response timed out." & vbCrLf
                 End If
                 StateMachine = NetScanStates.PrintingPingResult
             Case NetScanStates.PrintingPingResult
                 If IsHostAlive Then
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "4 packets sent, 4 receivced, 0% loss. Starting vulnerability scanning..." & vbCrLf
                 Else
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "4 packets sent, 0 receivced, 100% loss." & vbCrLf
                 End If
                 If IsHostAlive Then
@@ -186,87 +179,87 @@ Public Class NetScanWindow
                     StateMachine = NetScanStates.PrintingEndMessage
                 End If
             Case NetScanStates.ScaningVulnerability1
-                CodeText = CodeText & _
+                ConsoleText = ConsoleText & _
                            "Sending ACC_FAK_902 packet to " & HostIP & "for GSVA-22093 checking..." & vbCrLf
                 StateMachine = NetScanStates.PrintingVulnerability1Result
             Case NetScanStates.PrintingVulnerability1Result
                 If RandomGen.Next(0, 100) >= 95 Then
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Response with 0x" & GenerateRandomHexString(8).ToUpper() & " received. GSVA-22093 is available on host." & vbCrLf
                     IsHostVulnerable = True
                 Else
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Error: connection timed out, or closed by host. GSVA-22093 detection failed." & vbCrLf
                 End If
                 StateMachine = NetScanStates.ScaningVulnerability2
             Case NetScanStates.ScaningVulnerability2
-                CodeText = CodeText & _
+                ConsoleText = ConsoleText & _
                            "Sending RCL-REQ-I-3291 request to " & HostIP & ":" & RandomGen.Next(1024, 65536).ToString() & "for GSVA-23127 checking..." & vbCrLf
                 StateMachine = NetScanStates.PrintingVulnerability2Result
             Case NetScanStates.PrintingVulnerability2Result
                 If RandomGen.Next(0, 100) >= 95 Then
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Response with 0x" & GenerateRandomHexString(8).ToUpper() & "_" & GenerateRandomHexString(8).ToUpper() & " received. GSVA-23127 is available on host." & vbCrLf
                     IsHostVulnerable = True
                 Else
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Response RCL_INT_ADMIN_DISABLED received. GSVA-23127 detection failed." & vbCrLf
                 End If
                 StateMachine = NetScanStates.ScaningVulnerability3
             Case NetScanStates.ScaningVulnerability3
-                CodeText = CodeText & _
+                ConsoleText = ConsoleText & _
                            "Sending WSSP_QUERY_VERSION request to " & HostIP & "for GSVA-23542 checking..." & vbCrLf
                 StateMachine = NetScanStates.PrintingVulnerability3Result
             Case NetScanStates.PrintingVulnerability3Result
                 If RandomGen.Next(0, 100) >= 95 Then
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Response with 0x" & GenerateRandomHexString(8).ToUpper & " received. GSVA-23542 is available on host." & vbCrLf
                     IsHostVulnerable = True
                 Else
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Error: connection timed out, or closed by host. GSVA-23542 detection failed." & vbCrLf
                 End If
                 StateMachine = NetScanStates.PrintingEndMessage
             Case NetScanStates.PrintingEndMessage
                 If IsHostAlive Then
                     If IsHostVulnerable Then
-                        CodeText = CodeText & _
+                        ConsoleText = ConsoleText & _
                                    "Host " & HostIP & " is alive with 1 or more vulnerabilities detected." & vbCrLf
                     Else
-                        CodeText = CodeText & _
+                        ConsoleText = ConsoleText & _
                                    "Host " & HostIP & " is alive." & vbCrLf
                     End If
                 Else
-                    CodeText = CodeText & _
+                    ConsoleText = ConsoleText & _
                                "Host " & HostIP & " is unreachable. Switching to next host." & vbCrLf
                 End If
-                CodeText = CodeText & vbCrLf
+                ConsoleText = ConsoleText & vbCrLf
                 GenerateNextHost()
                 StateMachine = NetScanStates.SelectingAddress
         End Select
 
         'Concat cursor
         If IsConsoleCursorVisible Then
-            CodeTextDisplay = CodeText & ConsoleCursorFull
+            ConsoleTextDisplay = ConsoleText & ConsoleCursorFull
         Else
-            CodeTextDisplay = CodeText & ConsoleCursorEmpty
+            ConsoleTextDisplay = ConsoleText & ConsoleCursorEmpty
         End If
 
         'Update display
-        lblCode.Text = CodeTextDisplay
-        scrCodeContainer.ScrollToEnd()
+        lblConsole.Text = ConsoleTextDisplay
+        scrConsoleContainer.ScrollToEnd()
     End Sub
 
     Private Sub CursorTimer_Tick()
         'Flip console's cursor status
         IsConsoleCursorVisible = Not IsConsoleCursorVisible
         If IsConsoleCursorVisible Then
-            CodeTextDisplay = CodeText & ConsoleCursorFull
+            ConsoleTextDisplay = ConsoleText & ConsoleCursorFull
         Else
-            CodeTextDisplay = CodeText & ConsoleCursorEmpty
+            ConsoleTextDisplay = ConsoleText & ConsoleCursorEmpty
         End If
 
         'Update display
-        lblCode.Text = CodeTextDisplay
+        lblConsole.Text = ConsoleTextDisplay
     End Sub
 End Class

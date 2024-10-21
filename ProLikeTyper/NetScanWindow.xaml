@@ -7,7 +7,7 @@
     Background="Black" Foreground="#FF00FF00" 
     FontFamily="Consolas"
     Height="525" Width="735" MinHeight="250" MinWidth="450">
-    <ScrollViewer x:Name="scrCodeContainer">
-        <TextBlock x:Name="lblCode" TextWrapping="Wrap" FontSize="16" VerticalAlignment="Top" />
+    <ScrollViewer x:Name="scrConsoleContainer">
+        <TextBlock x:Name="lblConsole" TextWrapping="Wrap" FontSize="16" VerticalAlignment="Top" />
     </ScrollViewer>
 </Controls:MetroWindow>
