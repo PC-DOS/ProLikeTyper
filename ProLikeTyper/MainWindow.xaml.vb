@@ -1,13 +1,46 @@
-﻿Class MainWindow
+﻿Imports System.Threading
+Imports System.Threading.Tasks
+Class MainWindow
     Const CommandNameDefault As String = "!UnnamedCommand!"
     Const CommandInternalNameDefault As String = "!NOCMDNAME!"
     Const CommandDescriptionNoSelection As String = "Double-click on an item to execute it"
     Const CommandDescriptionDefault As String = "No available descriptions for this command"
+
     Private Structure CommandItem
         Dim Name As String
         Dim InternalName As String
         Dim Description As String
     End Structure
+
+    Private Function OpenWindowAsync(Of TWindow As {System.Windows.Window, New})() As Task
+        Dim TaskComp As New TaskCompletionSource(Of Object)
+
+        'Create child window container
+        Dim WinThread As New Thread(Sub()
+                                        Dim WindowInstance As New TWindow
+                                        'Close target window's event loop when closed
+                                        AddHandler WindowInstance.Closed, Sub()
+                                                                              System.Windows.Threading.Dispatcher.ExitAllFrames()
+                                                                          End Sub
+                                        'Show window in separated thread
+                                        WindowInstance.Show()
+                                        'Start window's event loop
+                                        System.Windows.Threading.Dispatcher.Run()
+                                        'Set tasks result
+                                        TaskComp.SetResult(Nothing)
+                                    End Sub)
+
+        'Allow sub thread to be exited when calling Application.Current.Shutdown()
+        WinThread.IsBackground = True
+        'Allow UI dispatching
+        WinThread.SetApartmentState(ApartmentState.STA)
+        'Start sub thread
+        WinThread.Start()
+
+        'Returns task object
+        Return TaskComp.Task
+    End Function
+
     Private Function ParseSelectedCommand(SelectedCommand As ListBoxItem) As CommandItem
         Dim CommandData As CommandItem
         'Split selected item tag by "_", tag is organized in following structure:
@@ -59,26 +92,19 @@
             'Execute command
             Select Case SelectedCommandData.InternalName
                 Case "CODER"
-                    Dim CoderWindowInstance As New CoderWindow
-                    CoderWindowInstance.Show()
+                    OpenWindowAsync(Of CoderWindow)()
                 Case "NETSCAN"
-                    Dim NetScanWindowInstance As New NetScanWindow
-                    NetScanWindowInstance.Show()
+                    OpenWindowAsync(Of NetScanWindow)()
                 Case "SYSMON"
-                    Dim SysMonWindowInstance As New SystemMonitorWindow
-                    SysMonWindowInstance.Show()
+                    OpenWindowAsync(Of SystemMonitorWindow)()
                 Case "PULLDATA"
-                    Dim DownloaderWindowInstance As New DownloaderWindow
-                    DownloaderWindowInstance.Show()
+                    OpenWindowAsync(Of DownloaderWindow)()
                 Case "PRODMON"
-                    Dim ProductionMonitorWindowInstance As New ProductionMonitorWindow
-                    ProductionMonitorWindowInstance.Show()
+                    OpenWindowAsync(Of ProductionMonitorWindow)()
                 Case "COMPILE"
-                    Dim CompilerWindowInstance As New CompilerWindow
-                    CompilerWindowInstance.Show()
+                    OpenWindowAsync(Of CompilerWindow)()
                 Case "TRAIN"
-                    Dim TrainWindowInstance As New TrainWindow
-                    TrainWindowInstance.Show()
+                    OpenWindowAsync(Of TrainWindow)()
                 Case "EXIT"
                     Application.Current.Shutdown()
                 Case Else
