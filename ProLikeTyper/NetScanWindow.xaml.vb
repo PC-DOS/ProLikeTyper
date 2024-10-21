@@ -96,6 +96,8 @@ Public Class NetScanWindow
         'Host availability
         If RandomGen.Next(0, 10) <= 2 Then
             IsHostAlive = True
+        Else
+            IsHostAlive = False
         End If
         IsHostVulnerable = False
     End Sub
