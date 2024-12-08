@@ -94,7 +94,7 @@ Public Class SystemMonitorWindow
         CPUHistoryXAxis.Font = "Consolas"
         CPUHistoryXAxis.LabelFormatter = Function(Val As Double) ""
         CPUHistoryXAxis.Position = Axes.AxisPosition.Bottom
-        CPUHistoryXAxis.Maximum = HistoryDataPointCount
+        CPUHistoryXAxis.Maximum = HistoryDataPointCount - 1
         CPUHistoryXAxis.Minimum = 0
         CPUHistoryXAxis.IsZoomEnabled = False
         CPUHistoryXAxis.IsPanEnabled = False
@@ -155,7 +155,7 @@ Public Class SystemMonitorWindow
         RAMHistoryXAxis.Font = "Consolas"
         RAMHistoryXAxis.LabelFormatter = Function(Val As Double) ""
         RAMHistoryXAxis.Position = Axes.AxisPosition.Bottom
-        RAMHistoryXAxis.Maximum = HistoryDataPointCount
+        RAMHistoryXAxis.Maximum = HistoryDataPointCount - 1
         RAMHistoryXAxis.Minimum = 0
         RAMHistoryXAxis.IsZoomEnabled = False
         RAMHistoryXAxis.IsPanEnabled = False
@@ -222,7 +222,7 @@ Public Class SystemMonitorWindow
         DiskHistoryXAxis.Font = "Consolas"
         DiskHistoryXAxis.LabelFormatter = Function(Val As Double) ""
         DiskHistoryXAxis.Position = Axes.AxisPosition.Bottom
-        DiskHistoryXAxis.Maximum = HistoryDataPointCount
+        DiskHistoryXAxis.Maximum = HistoryDataPointCount - 1
         DiskHistoryXAxis.Minimum = 0
         DiskHistoryXAxis.IsZoomEnabled = False
         DiskHistoryXAxis.IsPanEnabled = False

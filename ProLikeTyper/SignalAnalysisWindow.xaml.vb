@@ -36,8 +36,8 @@ Public Class SignalAnalysisWindow
     Dim SignalRawXAxis As Axis
     Dim SignalRawYAxis As Axis
     'FFT
-    Dim SignalFFTBuffer(SignalFFTBufferSize) As Double
-    Dim SignalFFTWindow(SignalFFTBufferSize) As Double
+    Dim SignalFFTBuffer(SignalFFTBufferSize - 1) As Double
+    Dim SignalFFTWindow(SignalFFTBufferSize - 1) As Double
     Dim SignalFFTPlotter As New LineSeries
     Dim SignalFFTDataSeries As OxyPlot.Series.LineSeries
     Dim SignalFFTXAxis As Axis
@@ -142,7 +142,7 @@ Public Class SignalAnalysisWindow
         'SignalRawXAxis.Font = "Consolas"
         SignalRawXAxis.LabelFormatter = Function(Val As Double) ""
         SignalRawXAxis.Position = Axes.AxisPosition.Bottom
-        SignalRawXAxis.Maximum = SignalDataPointCount
+        SignalRawXAxis.Maximum = SignalDataPointCount - 1
         SignalRawXAxis.Minimum = 0
         SignalRawXAxis.IsZoomEnabled = False
         SignalRawXAxis.IsPanEnabled = False
@@ -178,7 +178,7 @@ Public Class SignalAnalysisWindow
         SignalFFTPlotter.StrokeThickness = 1
         'Data series
         SignalFFTDataSeries = SignalFFTPlotter.CreateModel()
-        For i As Integer = 1 To SignalDataPointCount
+        For i As Integer = 1 To SignalDataPointCount / 2
             SignalFFTBuffer(i) = SignalFFTMin
             SignalFFTDataSeries.Points.Add(New DataPoint(i - 1, SignalFFTMin))
         Next
@@ -198,7 +198,7 @@ Public Class SignalAnalysisWindow
         'SignalFFTXAxis.Font = "Consolas"
         SignalFFTXAxis.LabelFormatter = Function(Val As Double) ""
         SignalFFTXAxis.Position = Axes.AxisPosition.Bottom
-        SignalFFTXAxis.Maximum = SignalDataPointCount / 2
+        SignalFFTXAxis.Maximum = SignalDataPointCount / 2 - 1
         SignalFFTXAxis.Minimum = 0
         SignalFFTXAxis.IsZoomEnabled = False
         SignalFFTXAxis.IsPanEnabled = False
@@ -233,9 +233,9 @@ Public Class SignalAnalysisWindow
         'Plotting area
         'SpectrogramPlotter.Color = Color.FromRgb(0, 0, 255)
         SpectrogramPlotter.X0 = 0
-        SpectrogramPlotter.X1 = SpectrogramLineCount
+        SpectrogramPlotter.X1 = SpectrogramLineCount - 1
         SpectrogramPlotter.Y0 = 0
-        SpectrogramPlotter.Y1 = SignalDataPointCount / 2
+        SpectrogramPlotter.Y1 = SignalDataPointCount / 2 - 1
         'Data series
         SpectrogramDataSeries = SpectrogramPlotter.CreateModel()
         For col As Integer = 0 To SpectrogramLineCount - 1
@@ -261,7 +261,7 @@ Public Class SignalAnalysisWindow
         'SpectrogramXAxis.Font = "Consolas"
         SpectrogramXAxis.LabelFormatter = Function(Val As Double) ""
         SpectrogramXAxis.Position = Axes.AxisPosition.Bottom
-        SpectrogramXAxis.Maximum = SpectrogramLineCount
+        SpectrogramXAxis.Maximum = SpectrogramLineCount - 1
         SpectrogramXAxis.Minimum = 0
         SpectrogramXAxis.IsZoomEnabled = False
         SpectrogramXAxis.IsPanEnabled = False
@@ -280,7 +280,7 @@ Public Class SignalAnalysisWindow
         'SpectrogramYAxis.Font = "Consolas"
         SpectrogramYAxis.LabelFormatter = Function(Val As Double) ""
         SpectrogramYAxis.Position = Axes.AxisPosition.Left
-        SpectrogramYAxis.Maximum = SignalDataPointCount / 2
+        SpectrogramYAxis.Maximum = SignalDataPointCount / 2 - 1
         SpectrogramYAxis.Minimum = 0
         SpectrogramYAxis.IsZoomEnabled = False
         SpectrogramYAxis.IsPanEnabled = False
@@ -292,6 +292,7 @@ Public Class SignalAnalysisWindow
         SpectrogramZAxis.LowColor = Colors.Black
         SpectrogramZAxis.GradientStops = OxyPaletteToGradientStops(OxyPalettes.Jet(10))
         SpectrogramZAxis.PaletteSize = SignalFFTMax - SignalFFTMin + 1
+        SpectrogramZAxis.LabelFormatter = Function(Val As Double) ""
         SpectrogramZAxis.Position = Axes.AxisPosition.Right
         SpectrogramZAxis.Maximum = SignalFFTMax
         SpectrogramZAxis.Minimum = SignalFFTMin
@@ -336,7 +337,7 @@ Public Class SignalAnalysisWindow
         'Run FFT
         Fourier.ForwardReal(SignalFFTBuffer, SignalDataPointCount)
 
-        'Convert result from complex to real, and displaying
+        'Convert FFT result from complex to real, and displaying
         For i = 0 To SignalDataPointCount / 2 - 1
             SignalFFTDataSeries.Points(i) = New DataPoint(i, Math.Sqrt(SignalFFTBuffer(2 * i) ^ 2 + SignalFFTBuffer(2 * i + 1) ^ 2))
         Next
