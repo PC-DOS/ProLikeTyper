@@ -1,10 +1,10 @@
 ﻿Imports System.Diagnostics
-Imports OxyPlot
-Imports OxyPlot.Wpf
 Imports System.Reflection
 Imports System.IO
 Imports System.Text
 Imports System.Windows.Threading
+Imports OxyPlot
+Imports OxyPlot.Wpf
 
 Public Class SystemMonitorWindow
     'Data collecting options
@@ -71,7 +71,6 @@ Public Class SystemMonitorWindow
         lblCPUUsage.Text = "CPU Usage - " & CurrentCPUUsage.ToString("F2") & "%"
         CPUDataCollectingTimer.Interval = TimeSpan.FromMilliseconds(DataCollectingInterval)
         AddHandler CPUDataCollectingTimer.Tick, AddressOf CPUDataCollectingTimer_Tick
-        CPUDataCollectingTimer.Start()
         'Data plotting related
         'Plotting area
         CPUHistoryPlotter.Color = Color.FromRgb(0, 255, 0)
@@ -95,7 +94,7 @@ Public Class SystemMonitorWindow
         CPUHistoryXAxis.Font = "Consolas"
         CPUHistoryXAxis.LabelFormatter = Function(Val As Double) ""
         CPUHistoryXAxis.Position = Axes.AxisPosition.Bottom
-        CPUHistoryXAxis.Maximum = 100
+        CPUHistoryXAxis.Maximum = HistoryDataPointCount
         CPUHistoryXAxis.Minimum = 0
         CPUHistoryXAxis.IsZoomEnabled = False
         CPUHistoryXAxis.IsPanEnabled = False
@@ -133,7 +132,6 @@ Public Class SystemMonitorWindow
         lblRAMUsage.Text = "RAM Usage - " & CurrentRAMUsage.ToString("F2") & " MB / " & GetRAMTotalInMegabyte().ToString("F2") & " MB"
         RAMDataCollectingTimer.Interval = TimeSpan.FromMilliseconds(DataCollectingInterval)
         AddHandler RAMDataCollectingTimer.Tick, AddressOf RAMDataCollectingTimer_Tick
-        RAMDataCollectingTimer.Start()
         'Data plotting related
         'Plotting area
         RAMHistoryPlotter.Color = Color.FromRgb(0, 255, 0)
@@ -157,7 +155,7 @@ Public Class SystemMonitorWindow
         RAMHistoryXAxis.Font = "Consolas"
         RAMHistoryXAxis.LabelFormatter = Function(Val As Double) ""
         RAMHistoryXAxis.Position = Axes.AxisPosition.Bottom
-        RAMHistoryXAxis.Maximum = 100
+        RAMHistoryXAxis.Maximum = HistoryDataPointCount
         RAMHistoryXAxis.Minimum = 0
         RAMHistoryXAxis.IsZoomEnabled = False
         RAMHistoryXAxis.IsPanEnabled = False
@@ -198,7 +196,6 @@ Public Class SystemMonitorWindow
         lblDiskUsage.Text = "Disk Usage - " & CurrentDiskReadLoad.ToString("F2") & "% Read / " & CurrentDiskWriteLoad.ToString("F2") & "% Write"
         DiskDataCollectingTimer.Interval = TimeSpan.FromMilliseconds(DataCollectingInterval)
         AddHandler DiskDataCollectingTimer.Tick, AddressOf DiskDataCollectingTimer_Tick
-        DiskDataCollectingTimer.Start()
         'Data plotting related
         'Plotting area
         DiskReadHistoryPlotter.Color = Color.FromRgb(0, 255, 0)
@@ -225,7 +222,7 @@ Public Class SystemMonitorWindow
         DiskHistoryXAxis.Font = "Consolas"
         DiskHistoryXAxis.LabelFormatter = Function(Val As Double) ""
         DiskHistoryXAxis.Position = Axes.AxisPosition.Bottom
-        DiskHistoryXAxis.Maximum = 100
+        DiskHistoryXAxis.Maximum = HistoryDataPointCount
         DiskHistoryXAxis.Minimum = 0
         DiskHistoryXAxis.IsZoomEnabled = False
         DiskHistoryXAxis.IsPanEnabled = False
@@ -255,6 +252,11 @@ Public Class SystemMonitorWindow
         pltDiskUsage.Axes.Add(DiskHistoryYAxis)
         pltDiskUsage.Series.Add(DiskReadHistoryPlotter)
         pltDiskUsage.Series.Add(DiskWriteHistoryPlotter)
+
+        'Start timers
+        CPUDataCollectingTimer.Start()
+        RAMDataCollectingTimer.Start()
+        DiskDataCollectingTimer.Start()
     End Sub
 
     Private Sub CPUDataCollectingTimer_Tick()

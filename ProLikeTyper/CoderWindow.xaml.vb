@@ -37,11 +37,15 @@ Public Class CoderWindow
         'Try loading code from external code file
         Dim ExternalCodeFilePath As String = AppDomain.CurrentDomain.SetupInformation.ApplicationBase & "\" & ExternalCodeSource
         If File.Exists(ExternalCodeFilePath) Then
-            Dim ExternalCodeFileStream As StreamReader = File.OpenText(ExternalCodeFilePath)
-            While Not ExternalCodeFileStream.EndOfStream
-                CodeSourceList.Add(ExternalCodeFileStream.ReadLine())
-            End While
-            ExternalCodeFileStream.Close()
+            Try
+                Dim ExternalCodeFileStream As StreamReader = File.OpenText(ExternalCodeFilePath)
+                While Not ExternalCodeFileStream.EndOfStream
+                    CodeSourceList.Add(ExternalCodeFileStream.ReadLine())
+                End While
+                ExternalCodeFileStream.Close()
+            Catch ex As Exception
+                CodeSourceList.Clear()
+            End Try
         End If
 
         'If no external code file available, or code file is empty, fall back to internal code source

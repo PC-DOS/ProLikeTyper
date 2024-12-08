@@ -105,6 +105,8 @@ Class MainWindow
                     OpenWindowAsync(Of CompilerWindow)()
                 Case "TRAIN"
                     OpenWindowAsync(Of TrainWindow)()
+                Case "SIGANALYSIS"
+                    OpenWindowAsync(Of SignalAnalysisWindow)()
                 Case "EXIT"
                     Application.Current.Shutdown()
                 Case Else

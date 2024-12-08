@@ -58,6 +58,9 @@
     <Reference Include="MahApps.Metro">
       <HintPath>..\packages\MahApps.Metro.1.6.5\lib\net40\MahApps.Metro.dll</HintPath>
     </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\packages\MathNet.Numerics.3.20.2\lib\net40\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="OxyPlot">
       <HintPath>..\packages\OxyPlot.Core.1.0.0\lib\net40\OxyPlot.dll</HintPath>
     </Reference>
@@ -97,6 +100,9 @@
     </Compile>
     <Compile Include="ProductionMonitorWindow.xaml.vb">
       <DependentUpon>ProductionMonitorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SignalAnalysisWindow.xaml.vb">
+      <DependentUpon>SignalAnalysisWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SystemMonitorWindow.xaml.vb">
       <DependentUpon>SystemMonitorWindow.xaml</DependentUpon>
@@ -138,6 +144,10 @@
     <Page Include="ProductionMonitorWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SignalAnalysisWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SystemMonitorWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -205,6 +215,9 @@
   <ItemGroup>
     <Resource Include="Icon\Icon.ico" />
     <Resource Include="Icon\Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SigData.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

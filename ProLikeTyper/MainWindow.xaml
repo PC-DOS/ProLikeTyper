@@ -6,7 +6,7 @@
     WindowTitleBrush="Gray" NonActiveWindowTitleBrush="LightGray" TitleForeground="Black"
     Background="DarkGray" Foreground="White"
     FontFamily="Consolas"
-    Height="350" Width="525" MinHeight="250" MinWidth="450">
+    Height="350" Width="545" MinHeight="250" MinWidth="450">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="125" />
@@ -22,6 +22,7 @@
                 <ListBoxItem Content="ProdMon" Background="#FF646464" Foreground="White" Tag="PRODMON_Simulates a production monitoring system" />
                 <ListBoxItem Content="Compile" Background="#FF646464" Foreground="White" Tag="COMPILE_Simulates a compiling screen" />
                 <ListBoxItem Content="Train" Background="#FF646464" Foreground="White" Tag="TRAIN_Simulates a neural network training screen" />
+                <ListBoxItem Content="SigAnalysis" Background="#FF646464" Foreground="White" Tag="SIGANALYSIS_Simulates a signal analyzing screen, put &quot;SigData.txt&quot; in app folder to use your customized signal, signal points are separated by halfwidth comma (&quot;,&quot;), data range should be [-2048, 2047]" />
                 <ListBoxItem Content="Exit" Background="#FF646464" Foreground="White" Tag="EXIT_Stop all executing commands and exit" />
             </ListBox>
         </Grid>
