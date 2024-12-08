@@ -336,7 +336,7 @@ Public Class SignalAnalysisWindow
         'Run FFT
         Fourier.ForwardReal(SignalFFTBuffer, SignalDataPointCount)
 
-        'Complex result to real and displaying
+        'Convert result from complex to real, and displaying
         For i = 0 To SignalDataPointCount / 2 - 1
             SignalFFTDataSeries.Points(i) = New DataPoint(i, Math.Sqrt(SignalFFTBuffer(2 * i) ^ 2 + SignalFFTBuffer(2 * i + 1) ^ 2))
         Next
