@@ -23,7 +23,7 @@ Public Class DownloaderWindow
     Dim CurrentDownloadingDatabaseFileCount As Integer
     Dim CurrentDownloadingFileIndex As Integer
 
-    'Global randowm generator
+    'Global random generator
     Dim RandomGen As New Random
 
     'Downloader simulation timer

@@ -51,7 +51,7 @@ Public Class SignalAnalysisWindow
     Dim SpectrogramZAxis As LinearColorAxis
     Dim CurrentSpectrogramColumn As Integer
 
-    'Global randowm generator
+    'Global random generator
     Dim RandomGen As New Random
 
     Private Function GenerateRandomDouble(ValMin As Double, ValMax As Double) As Double

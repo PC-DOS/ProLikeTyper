@@ -23,7 +23,7 @@ Public Class CompilerWindow
     Dim CurrentCodebaseStepCount As Integer
     Dim CurrentStepIndex As Integer
 
-    'Global randowm generator
+    'Global random generator
     Dim RandomGen As New Random
 
     'Compiler simulation timer

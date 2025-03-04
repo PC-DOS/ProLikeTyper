@@ -14,7 +14,7 @@ Public Class ProductionMonitorWindow
     Const StoreMax As Double = 50
     Const StoreOffset As Double = 1
 
-    'Global randowm generator
+    'Global random generator
     Dim RandomGen As New Random
 
     'Timers

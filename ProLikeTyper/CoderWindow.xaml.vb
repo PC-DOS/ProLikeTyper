@@ -10,7 +10,7 @@ Public Class CoderWindow
     Dim CoderTimer As New DispatcherTimer(DispatcherPriority.Render)
     Dim CursorTimer As New DispatcherTimer(DispatcherPriority.Render)
 
-    'Global randowm generator
+    'Global random generator
     Dim RandomGen As New Random
 
     'Code source

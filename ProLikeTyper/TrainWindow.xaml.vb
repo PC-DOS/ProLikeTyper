@@ -29,7 +29,7 @@ Public Class TrainWindow
     Dim CurrentTrainEpochCount As Integer
     Dim CurrentEpochIndex As Integer
 
-    'Global randowm generator
+    'Global random generator
     Dim RandomGen As New Random
 
     'Training simulation timer

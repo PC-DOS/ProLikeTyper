@@ -10,7 +10,7 @@ Public Class NetScanWindow
     Dim ConsoleTimer As New DispatcherTimer(DispatcherPriority.Render)
     Dim CursorTimer As New DispatcherTimer(DispatcherPriority.Render)
 
-    'Global randowm generator
+    'Global random generator
     Dim RandomGen As New Random
 
     'Display text of console
